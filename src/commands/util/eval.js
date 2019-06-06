@@ -1,7 +1,7 @@
 const util = require('util');
 const discord = require('discord.js');
 const tags = require('common-tags');
-const {Command, util: {escapeRegex}} = require('../../../../Elara-Commando');
+const {Command, util: {escapeRegex}} = require('elaracmdo');
 
 const nl = '!!NL!!';
 const nlPattern = new RegExp(nl, 'g');

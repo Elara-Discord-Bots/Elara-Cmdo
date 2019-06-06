@@ -1,5 +1,5 @@
 const { ReactionCollector } = require('discord.js');
-const {CommandoMessage} = require('../../../../Elara-Commando');
+const {CommandoMessage} = require('elaracmdo');
 const {MessageEmbed} = require('discord.js');
 /**
  * @extends ReactionCollector

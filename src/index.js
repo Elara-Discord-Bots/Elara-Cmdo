@@ -14,7 +14,6 @@ module.exports = {
 	RichDisplay: require('./commands/React/RichDisplay'),
 	RichMenu: require('./commands/React/RichMenu'),
 	ReactionHandler: require('./commands/React/ReactionHandler'),
-	Schemas: require('./Schemas'),
 	util: require('./util'),
 	version: require('../package').version,
 

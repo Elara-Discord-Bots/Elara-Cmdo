@@ -354,7 +354,7 @@ class Command {
 		.setTimestamp()
 		.setTitle(`Error while running the command`)
 		.setDescription(`\`${err.name}\`\n\n${err.message}`)
-		.addField(`Please contact ${ownerList || "The Bot Developer"}`, `${invite ? ` in this server: ${invite}` : "\u200b"}`)
+		if(!this.client.isOwner(message.author.id)) ee.addField(`Please contact ${ownerList || "The Bot Developer"}`, `${invite ? ` in this server: ${invite}` : "\u200b"}`)
 		return message.channel.send(ee);
 	}
 

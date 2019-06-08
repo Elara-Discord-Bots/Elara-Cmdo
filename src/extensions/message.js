@@ -212,7 +212,7 @@ module.exports = Structures.extend('Message', Message => {
 					.setColor(`#FF0000`)
 					.setTitle(`INFO`)
 					.setDescription(`Command Canceled`)
-					return this.send(ce);
+					return this.embed(ce);
 				}
 				args = collResult.values;
 			}

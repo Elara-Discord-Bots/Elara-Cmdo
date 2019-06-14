@@ -10,7 +10,6 @@ module.exports = Structures.extend('Guild', Guild => {
 	class CommandoGuild extends Guild {
 		constructor(...args) {
 			super(...args);
-
 			/**
 			 * Shortcut to use setting provider methods for this guild
 			 * @type {GuildSettingsHelper}
@@ -22,15 +21,22 @@ module.exports = Structures.extend('Guild', Guild => {
 			 * getter/setter
 			 * @name CommandoGuild#_commandPrefix
 			 * @type {?string}
-			 * @private
 			 */
 			this._commandPrefix = null;
 			/**
 			 * Short cut to the guild color
 			 * @name CommandoGuild#color
 			 * @type {string}
+			 * @private
 			 */
 			this.color = '#00ffe9';
+			/**
+			 * Short cut to the guild currency
+			 * @name CommandoGuild#currency
+			 * @type {string}
+			 * @private
+			 */
+			this.currency = "Coins";
 		}
 		/**
 		 * Command prefix in the guild. An empty string indicates that there is no prefix, and only mentions will be used.

@@ -25,8 +25,13 @@ module.exports = Structures.extend('Guild', Guild => {
 			 * @private
 			 */
 			this._commandPrefix = null;
+			/**
+			 * Short cut to the guild color
+			 * @name CommandoGuild#color
+			 * @type {string}
+			 */
+			this.color = '#00ffe9';
 		}
-
 		/**
 		 * Command prefix in the guild. An empty string indicates that there is no prefix, and only mentions will be used.
 		 * Setting to `null` means that the prefix from {@link CommandoClient#commandPrefix} will be used instead.

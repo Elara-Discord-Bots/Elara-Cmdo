@@ -1,3 +1,7 @@
+WARNING
+=========
+
+
 Not recommended to use this.. as it's a modified version of the discord.js-commando framework(This is configured for the discord.js master branch/v12) and is for the Elara Discord Bots.
 =======
 

@@ -27,7 +27,7 @@ const dcolors = {
 
 },
       list1 = [
-    "SUPERCHIEFYT's Discord [Click Here](https://discord.gg/hgsM86w)",
+    "SUPERCHIEFYT's Discord [Click Here](https://discord.gg/NGdVDgk)",
     "Lackacord: [Click Here](https://discord.gg/lackadaisy)",
     "Kappa [Click Here](https://discord.gg/6bhZqZx)",
     "AdmiralBahroo (Nitro) [Click Here](https://discord.gg/cBnqxyG)",

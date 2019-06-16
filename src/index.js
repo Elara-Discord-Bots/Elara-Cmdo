@@ -20,6 +20,7 @@ module.exports = {
 	Paladins: require("./extensions/Paladins"),
 	Morse: require("./extensions/Morse"),
 	Gar: require("./extensions/Gar"),
+	randomPuppy: require("./extensions/randompuppy"),
 	util: require('./util'),
 	eutil: require("./eutil"),
 	version: require('../package').version,

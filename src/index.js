@@ -21,6 +21,7 @@ module.exports = {
 	Morse: require("./extensions/Morse"),
 	Gar: require("./extensions/Gar"),
 	randomPuppy: require("./extensions/randompuppy"),
+	YT: require("./extensions/ytsearch"),
 	util: require('./util'),
 	eutil: require("./eutil"),
 	version: require('../package').version,

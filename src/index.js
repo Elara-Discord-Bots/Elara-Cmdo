@@ -18,6 +18,7 @@ module.exports = {
 	CPU: require("./extensions/cpu-stats"),
 	Haste: require("./extensions/Hastebin"),
 	Paladins: require("./extensions/Paladins"),
+	Morse: require("./extensions/Morse"),
 	Gar: require("./extensions/Gar"),
 	util: require('./util'),
 	eutil: require("./eutil"),

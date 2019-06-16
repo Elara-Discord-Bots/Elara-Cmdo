@@ -17,6 +17,7 @@ module.exports = {
 	Translate: require("./Translate/index"),
 	CPU: require("./extensions/cpu-stats"),
 	Haste: require("./extensions/Hastebin"),
+	Paladins: require("./extensions/Paladins"),
 	Gar: require("./extensions/Gar"),
 	util: require('./util'),
 	eutil: require("./eutil"),

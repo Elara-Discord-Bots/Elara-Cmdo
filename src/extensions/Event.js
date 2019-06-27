@@ -1,4 +1,4 @@
-const {CommandoClient} = require('../../index');
+const {CommandoClient} = require('../index');
 let valid = [
     "channelCreate",
     "channelDelete",

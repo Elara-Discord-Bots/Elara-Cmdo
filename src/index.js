@@ -16,6 +16,7 @@ module.exports = {
 	ReactionHandler: require('./commands/React/ReactionHandler'),
 	Translate: require("./Translate/index"),
 	Docs: require("./extensions/Docs"),
+	Event: require("./extensions/Event"),
 	CPU: require("./extensions/cpu-stats"),
 	Haste: require("./extensions/Hastebin"),
 	Paladins: require("./extensions/Paladins"),

@@ -15,6 +15,7 @@ module.exports = {
 	RichMenu: require('./commands/React/RichMenu'),
 	ReactionHandler: require('./commands/React/ReactionHandler'),
 	Translate: require("./Translate/index"),
+	Event: require("./extensions/Event"),
 	CPU: require("./extensions/cpu-stats"),
 	Haste: require("./extensions/Hastebin"),
 	Paladins: require("./extensions/Paladins"),

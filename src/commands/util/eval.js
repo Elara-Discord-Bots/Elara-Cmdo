@@ -1,21 +1,19 @@
-const util = require('util');
-const discord = require('discord.js');
-const tags = require('common-tags');
-const {Command, util: {escapeRegex}} = require('elaracmdo');
-
-const nl = '!!NL!!';
-const nlPattern = new RegExp(nl, 'g');
-
+const {MessageEmbed} = require('discord.js'),
+	  {Command, util: {escapeRegex}, eutil} = require('elaracmdo'),
+	  {exec} = require('child_process'),
+	  util = require('util'),
+	  time = [];
 module.exports = class EvalCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'eval',
-			group: 'util',
+            name: 'eval',
+            aliases: [`e`, `ev`, `eva`, `code`],
+			group: 'owner',
 			memberName: 'eval',
 			description: 'Executes JavaScript code.',
 			details: 'Only the bot owner(s) may use this command.',
 			ownerOnly: true,
-
+            hidden: true,
 			args: [
 				{
 					key: 'script',
@@ -29,80 +27,163 @@ module.exports = class EvalCommand extends Command {
 		Object.defineProperty(this, '_sensitivePattern', { value: null, configurable: true });
 	}
 
-	run(msg, args) {
-		// Make a bunch of helpers
-		/* eslint-disable no-unused-vars */
-		const message = msg;
-		const client = msg.client;
-		const lastResult = this.lastResult;
-		const doReply = val => {
+async run(message, args) {
+	  const bot = message.client, 
+			msg = message,
+            client = message.client,
+            lastResult = this.lastResult,
+            emojis = message.client.emojis,
+            channels = message.client.channels,
+            guilds = message.client.guilds,
+            currency = message.guild.currency,
+			color = message.guild.color,
+			e = new MessageEmbed(),
+			Schemas = client.dbs,
+			evalembed = new MessageEmbed().setAuthor(client.user.tag, client.user.displayAvatarURL()).setColor(client.util.colors.default).setTimestamp(),
+			raw = {
+			guild: async function(args){
+				let data = await Schemas.settings.findOne({guildID: args});
+				if(!data) return message.say(`No data for that server`)
+				let inspected = await util.inspect(data, {depth: 2});
+				if(inspected.length <= 2030){
+				let embed = new MessageEmbed()
+				.setDescription(`\`\`\`js\n${inspected}\`\`\``)
+				.setColor(client.util.colors.default)
+				.setTitle(`Raw Guild Schema`)
+				return message.say(embed)
+				}else{
+					let link = await client.f.bin("Data", inspected, "js")
+					let embed = new MessageEmbed()
+					.setDescription(link)
+					.setColor(client.util.colors.default)
+					.setTitle(`Raw Guild Schema`)
+					return message.say(embed)					
+				}
+			},
+			user: async function(args){
+				let data = await Schemas.users.findOne({userID: args});
+				if(!data) return message.say(`No data for that user`)
+				let inspected = await util.inspect(data, {depth: 2});
+				if(inspected.length <= 2030){
+					let embed = new MessageEmbed()
+					.setDescription(`\`\`\`js\n${inspected}\`\`\``)
+					.setColor(client.util.colors.default)
+					.setTitle(`Raw User Schema`)
+					return message.say(embed)
+					}else{
+						let link = await client.f.bin("Data", inspected, "js")
+						let embed = new MessageEmbed()
+						.setDescription(link)
+						.setColor(client.util.colors.default)
+						.setTitle(`Raw User Schema`)
+						return message.say(embed)					
+					}
+			},
+			config: async function(args){
+				let data = await Schemas.config.findOne({guildID: args});
+				if(!data) return message.say(`No data for that server`)
+				let inspected = await util.inspect(data, {depth: 2});
+				if(inspected.length <= 2030){
+					let embed = new MessageEmbed()
+					.setDescription(`\`\`\`js\n${inspected}\`\`\``)
+					.setColor(client.util.colors.default)
+					.setTitle(`Raw Server-Config Schema`)
+					return message.say(embed)
+					}else{
+						let link = await client.f.bin("Data", inspected, "js")
+						let embed = new MessageEmbed()
+						.setDescription(link)
+						.setColor(client.util.colors.default)
+						.setTitle(`Raw Server-Config Schema`)
+						return message.say(embed)					
+					}
+			},
+			dev: async function(args){
+				let data = await Schemas.dev.findOne({clientID: args});
+				if(!data) return message.say(`Welp.. no developer database..`)
+				let inspected = await util.inspect(data, {depth: 2});
+				if(inspected.length <= 2030){
+					let embed = new MessageEmbed()
+					.setDescription(`\`\`\`js\n${inspected}\`\`\``)
+					.setColor(client.util.colors.default)
+					.setTitle(`Raw Developer Schema`)
+					return message.say(embed)
+					}else{
+						let link = await client.f.bin("Data", inspected, "js")
+						let embed = new MessageEmbed()
+						.setDescription(link)
+						.setColor(client.util.colors.default)
+						.setTitle(`Raw Developer Schema`)
+						return message.say(embed)					
+					}
+			}
+			},
+			doReply = val => {
 			if(val instanceof Error) {
-				msg.reply(`Callback error: \`${val}\``);
+				evalembed.setTitle(`Callback Error`).setDescription(`\`${val}\``)
+				message.say(evalembed);
 			} else {
 				const result = this.makeResultMessages(val, process.hrtime(this.hrStart));
 				if(Array.isArray(result)) {
-					for(const item of result) msg.reply(item);
+					for(const item of result){
+						evalembed.setTitle(`Result`).setDescription(item)
+						message.say(evalembed);
+					}
 				} else {
-					msg.reply(result);
+					evalembed.setTitle(`Result`).setDescription(result)
+					message.say(evalembed);
 				}
 			}
 		};
-		/* eslint-enable no-unused-vars */
 
-		// Run the code and measure its execution time
 		let hrDiff;
 		try {
 			const hrStart = process.hrtime();
 			this.lastResult = eval(args.script);
 			hrDiff = process.hrtime(hrStart);
 		} catch(err) {
-			return msg.reply(`Error while evaluating: \`${err}\``);
+			evalembed.setTitle(`Error while evaluating`).setDescription(`\`\`\`diff\n- ${err}\`\`\``)
+			message.say(evalembed);
 		}
-
-		// Prepare for callback time and respond
 		this.hrStart = process.hrtime();
-		const result = this.makeResultMessages(this.lastResult, hrDiff, args.script);
-		if(Array.isArray(result)) {
-			return result.map(item => msg.reply(item));
-		} else {
-			return msg.reply(result);
-		}
+		const response = this.makeResultMessages(this.lastResult, hrDiff, args.script, message.editable);
+		if (msg.editable) {
+            if (response instanceof Array) {
+                if (response.length > 0) response = response.slice(1, response.length - 1);
+                for (const re of response) msg.say(re);
+                return null;
+            } else {
+				evalembed
+				.setTitle(`Result`)
+				.setDescription(response)
+				.setFooter(`Executed in: ${time[0]}`)
+                return message.say(evalembed);
+            }
+        }else{
+            evalembed
+            .setTitle(`Result`)
+			.setDescription(response)
+			.setFooter(`Executed in: ${time[0]}`)
+            return message.say(evalembed);
+        }
 	}
 
-	makeResultMessages(result, hrDiff, input = null) {
-		const inspected = util.inspect(result, { depth: 0 })
-			.replace(nlPattern, '\n')
-			.replace(this.sensitivePattern, '--snip--');
-		const split = inspected.split('\n');
-		const last = inspected.length - 1;
-		const prependPart = inspected[0] !== '{' && inspected[0] !== '[' && inspected[0] !== "'" ? split[0] : inspected[0];
-		const appendPart = inspected[last] !== '}' && inspected[last] !== ']' && inspected[last] !== "'" ?
-			split[split.length - 1] :
-			inspected[last];
-		const prepend = `\`\`\`javascript\n${prependPart}\n`;
-		const append = `\n${appendPart}\n\`\`\``;
+	makeResultMessages(result, hrDiff, input = null, editable = false) {
+		const inspected = util.inspect(result, { depth: 0 }).replace(new RegExp('!!NL!!', 'g'), '\n').replace(this.sensitivePattern, 'no u');
 		if(input) {
-			return discord.splitMessage(tags.stripIndents`
-				*Executed in ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
-				\`\`\`javascript
-				${inspected}
-				\`\`\`
-			`, { maxLength: 1900, prepend, append });
+			time.push(`${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.`)
+			return `${editable ? `\`\`\`js\n${input}\`\`\`` : ''}
+			\`\`\`js\n${inspected}\`\`\``;
 		} else {
-			return discord.splitMessage(tags.stripIndents`
-				*Callback executed after ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
-				\`\`\`javascript
-				${inspected}
-				\`\`\`
-			`, { maxLength: 1900, prepend, append });
+			time.push(`${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.`)
+			return `\`\`\`js\n${inspected}\`\`\``;
 		}
 	}
 
 	get sensitivePattern() {
 		if(!this._sensitivePattern) {
-			const client = this.client;
 			let pattern = '';
-			if(client.token) pattern += escapeRegex(client.token);
+			if(this.client.token) pattern += escapeRegex(this.client.token);
 			Object.defineProperty(this, '_sensitivePattern', { value: new RegExp(pattern, 'gi'), configurable: false });
 		}
 		return this._sensitivePattern;

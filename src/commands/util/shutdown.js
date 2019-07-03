@@ -1,4 +1,4 @@
-const { Command } = require('../base');
+const Command = require('../base');
 const Discord = require('discord.js');
 module.exports = class ShutdownCommand extends Command {
     constructor(client) {

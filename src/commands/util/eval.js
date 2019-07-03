@@ -171,11 +171,15 @@ async run(message, args) {
 	makeResultMessages(result, hrDiff, input = null, editable = false) {
 		const inspected = util.inspect(result, { depth: 0 }).replace(new RegExp('!!NL!!', 'g'), '\n').replace(this.sensitivePattern, 'no u');
 		if(input) {
+			if(hrDiff){
 			time.push(`${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.`)
+			}
 			return `${editable ? `\`\`\`js\n${input}\`\`\`` : ''}
 			\`\`\`js\n${inspected}\`\`\``;
 		} else {
+			if(hrDiff){
 			time.push(`${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.`)
+			}
 			return `\`\`\`js\n${inspected}\`\`\``;
 		}
 	}

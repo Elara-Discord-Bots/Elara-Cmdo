@@ -121,17 +121,17 @@ async run(message, args) {
 			doReply = val => {
 			if(val instanceof Error) {
 				evalembed.setTitle(`Callback Error`).setDescription(`\`${val}\``)
-				message.say(evalembed);
+				return message.say(evalembed);
 			} else {
 				const result = this.makeResultMessages(val, process.hrtime(this.hrStart));
 				if(Array.isArray(result)) {
 					for(const item of result){
 						evalembed.setTitle(`Result`).setDescription(item)
-						message.say(evalembed);
+						return message.say(evalembed);
 					}
 				} else {
 					evalembed.setTitle(`Result`).setDescription(result)
-					message.say(evalembed);
+					return message.say(evalembed);
 				}
 			}
 		};
@@ -143,7 +143,7 @@ async run(message, args) {
 			hrDiff = process.hrtime(hrStart);
 		} catch(err) {
 			evalembed.setTitle(`Error while evaluating`).setDescription(`\`\`\`diff\n- ${err}\`\`\``)
-			message.say(evalembed);
+			return message.say(evalembed);
 		}
 		this.hrStart = process.hrtime();
 		const response = this.makeResultMessages(this.lastResult, hrDiff, args.script, message.editable);

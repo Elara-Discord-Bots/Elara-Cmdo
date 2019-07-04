@@ -341,21 +341,14 @@ class Command {
 	 * @returns {Promise<?Message|?Array<Message>>}
 	 */
 	onError(err, message, args, fromPattern, result) { // eslint-disable-line no-unused-vars
-		const owners = this.client.owners;
-		const ownerList = owners ? owners.map((usr, i) => {
-			const or = i === owners.length - 1 && owners.length > 1 ? 'or ' : '';
-			return `${or}${escapeMarkdown(usr.username)}#${usr.discriminator}`;
-		}).join(owners.length > 2 ? ', ' : ' ') : '';
-
-		const invite = this.client.options.invite;
-		let ee = new MessageEmbed()
+		let embed = new MessageEmbed()
 		.setAuthor(this.client.user.tag, this.client.user.displayAvatarURL())
-		.setColor(`#FF0000`)
-		.setTimestamp()
-		.setTitle(`Error while running the command`)
-		.setDescription(`\`${err.name}\`\n\n${err.message}`)
-		if(!this.client.isOwner(message.author.id)) ee.addField(`Please contact ${ownerList || "The Bot Developer"}`, `${invite ? ` in this server: ${invite}` : "\u200b"}`)
-		return message.channel.send(ee);
+		.setColor(this.client.util.colors.default)
+		.setTitle(`Command "${this.name}" **Error**`)
+		.setDescription(`\`\`\`js\n${err}\`\`\``)
+		.setFooter(`This error has been reported to the Bot Developer${this.client.owners.length === 1 ? "" : "s"}`)
+		if(!this.client.isOwner(message.author.id)) embed.addField(`Please contact ${this.client.owners.map(c => c.tag).join(', ')}`, `${this.client.options.invite ? ` in this server: ${this.client.options.invite}` : "\u200b"}`)
+		return message.channel.send(embed);
 	}
 
 	/**

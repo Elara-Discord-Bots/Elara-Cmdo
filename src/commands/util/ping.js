@@ -20,12 +20,12 @@ module.exports = class PingCommand extends Command {
 
     async run(msg) {
         try{
-        let loadingembed = new Discord.RichEmbed()
+        let loadingembed = new Discord.MessageEmbed()
             .setColor(this.client.util.colors.cyan)
             .setDescription(`${this.client.util.emojis.eload} Loading.`)
             .setTimestamp()
         const message = await msg.channel.send(loadingembed);
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
             .setColor(this.client.util.colors.cyan)
             .setTitle(`${this.client.util.emojis.robot} Status ${this.client.util.emojis.robot}`)
             .setFooter(msg.author.tag, msg.author.displayAvatarURL())

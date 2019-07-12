@@ -1,6 +1,7 @@
 const Command = require('../base');
 const Discord = require('discord.js');
 const moment = require('moment');
+require("moment-duration-format");
 module.exports = class PingCommand extends Command {
     constructor(client) {
         super(client, {

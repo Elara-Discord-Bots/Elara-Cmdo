@@ -22,7 +22,7 @@ module.exports = class LSCommand extends Command {
         if(!guild) return message.channel.send(`I ain't in that server!`)
             guild.leave().then(async () => {
                 await message.channel.send({embed: {
-                    description: `${this.client.util.emojis.semoji} I have left ${guild.name}`,
+                    description: `:white_check_mark: I have left ${guild.name}`,
                     color: 0xFF000
                 }})
             })

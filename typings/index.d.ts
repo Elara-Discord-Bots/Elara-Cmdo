@@ -8,7 +8,7 @@ declare module 'SyncSqlite' {
 	export interface Statement {}
 }
 
-declare module 'elaracmdo' {
+declare module 'discord.js-commando' {
 	import { Channel, Client, ClientOptions, Collection, DMChannel, Emoji, Guild, GuildChannel, GuildMember, GuildResolvable, Message, MessageAttachment, MessageEmbed, MessageMentions, MessageOptions, MessageReaction, PermissionResolvable, PermissionString, ReactionEmoji, Role, Snowflake, StringResolvable, TextChannel, User, UserResolvable, VoiceState, Webhook } from 'discord.js';
 	import { Database as SQLiteDatabase, Statement as SQLiteStatement } from 'sqlite';
 	import { Database as SyncSQLiteDatabase, Statement as SyncSQLiteStatement } from 'SyncSqlite';
@@ -68,9 +68,9 @@ declare module 'elaracmdo' {
 		public constructor(client: CommandoClient, info: CommandInfo);
 
 		private _globalEnabled: boolean;
-		private _cooldowns: Map<string, object>;
+		private _throttles: Map<string, object>;
 
-		private cooldown(userID: string): object;
+		private throttle(userID: string): object;
 
 		private static validateInfo(client: CommandoClient, info: CommandInfo);
 
@@ -95,7 +95,7 @@ declare module 'elaracmdo' {
 		public nsfw: boolean;
 		public ownerOnly: boolean;
 		public patterns: RegExp[];
-		public cooldown: CooldownOptions;
+		public throttling: ThrottlingOptions;
 		public unknown: boolean;
 		public userPermissions: PermissionResolvable[];
 
@@ -106,7 +106,7 @@ declare module 'elaracmdo' {
 		public onBlock(message: CommandoMessage, reason: 'guildOnly' | 'nsfw'): Promise<Message | Message[]>;
 		public onBlock(message: CommandoMessage, reason: 'permission', data: { response?: string }): Promise<Message | Message[]>;
 		public onBlock(message: CommandoMessage, reason: 'clientPermissions', data: { missing: string }): Promise<Message | Message[]>;
-		public onBlock(message: CommandoMessage, reason: 'cooldown', data: { cooldown: Object, remaining: number }): Promise<Message | Message[]>;
+		public onBlock(message: CommandoMessage, reason: 'throttling', data: { throttle: Object, remaining: number }): Promise<Message | Message[]>;
 		public onError(err: Error, message: CommandoMessage, args: object | string | string[], fromPattern: false): Promise<Message | Message[]>;
 		public onError(err: Error, message: CommandoMessage, args: string[], fromPattern: true): Promise<Message | Message[]>;
 		public reload(): void;
@@ -243,7 +243,7 @@ declare module 'elaracmdo' {
 		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: string, data?: Object) => void): this;
 		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: 'guildOnly' | 'nsfw') => void): this;
 		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: 'permission', data: { response?: string }) => void): this;
-		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: 'cooldown', data: { cooldown: Object, remaining: number }) => void): this;
+		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: 'throttling', data: { throttle: Object, remaining: number }) => void): this;
 		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: 'clientPermissions', data: { missing: string }) => void): this;
 		on(event: 'commandCancel', listener: (command: Command, reason: string, message: CommandoMessage) => void): this;
 		on(event: 'commandError', listener: (command: Command, err: Error, message: CommandoMessage, args: object | string | string[], fromPattern: false) => void): this;
@@ -336,7 +336,7 @@ declare module 'elaracmdo' {
 		public registerCommand(command: Command | Function): CommandoRegistry;
 		public registerCommands(commands: Command[] | Function[], ignoreInvalid?: boolean): CommandoRegistry;
 		public registerCommandsIn(options: string | {}): CommandoRegistry;
-		public registerDefaultCommands(commands?: { help?: boolean, prefix?: boolean, eval?: boolean, ping?: boolean, commandState?: boolean, unknownCommand?: boolean, extra?: boolean }): CommandoRegistry;
+		public registerDefaultCommands(commands?: { help?: boolean, prefix?: boolean, eval?: boolean, ping?: boolean, commandState?: boolean, unknownCommand?: boolean }): CommandoRegistry;
 		public registerDefaultGroups(): CommandoRegistry;
 		public registerDefaults(): CommandoRegistry;
 		public registerDefaultTypes(types?: { string?: boolean, integer?: boolean, float?: boolean, boolean?: boolean, user?: boolean, member?: boolean, role?: boolean, channel?: boolean, message?: boolean, command?: boolean, group?: boolean }): CommandoRegistry;
@@ -486,7 +486,7 @@ declare module 'elaracmdo' {
 		clientPermissions?: PermissionResolvable[];
 		userPermissions?: PermissionResolvable[];
 		defaultHandling?: boolean;
-		cooldown?: CooldownOptions;
+		throttling?: ThrottlingOptions;
 		args?: ArgumentInfo[];
 		argsPromptLimit?: number;
 		argsType?: string;
@@ -514,7 +514,7 @@ declare module 'elaracmdo' {
 		response?: Promise<Message>;
 	}
 
-	type CooldownOptions = {
+	type ThrottlingOptions = {
 		usages: number;
 		duration: number;
 	}

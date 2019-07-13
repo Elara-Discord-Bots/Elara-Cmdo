@@ -68,9 +68,9 @@ declare module 'elaracmdo' {
 		public constructor(client: CommandoClient, info: CommandInfo);
 
 		private _globalEnabled: boolean;
-		private _throttles: Map<string, object>;
+		private _cooldowns: Map<string, object>;
 
-		private throttle(userID: string): object;
+		private cooldown(userID: string): object;
 
 		private static validateInfo(client: CommandoClient, info: CommandInfo);
 
@@ -95,7 +95,7 @@ declare module 'elaracmdo' {
 		public nsfw: boolean;
 		public ownerOnly: boolean;
 		public patterns: RegExp[];
-		public throttling: ThrottlingOptions;
+		public cooldown: CooldownOptions;
 		public unknown: boolean;
 		public userPermissions: PermissionResolvable[];
 
@@ -106,7 +106,7 @@ declare module 'elaracmdo' {
 		public onBlock(message: CommandoMessage, reason: 'guildOnly' | 'nsfw'): Promise<Message | Message[]>;
 		public onBlock(message: CommandoMessage, reason: 'permission', data: { response?: string }): Promise<Message | Message[]>;
 		public onBlock(message: CommandoMessage, reason: 'clientPermissions', data: { missing: string }): Promise<Message | Message[]>;
-		public onBlock(message: CommandoMessage, reason: 'throttling', data: { throttle: Object, remaining: number }): Promise<Message | Message[]>;
+		public onBlock(message: CommandoMessage, reason: 'cooldown', data: { cooldown: Object, remaining: number }): Promise<Message | Message[]>;
 		public onError(err: Error, message: CommandoMessage, args: object | string | string[], fromPattern: false): Promise<Message | Message[]>;
 		public onError(err: Error, message: CommandoMessage, args: string[], fromPattern: true): Promise<Message | Message[]>;
 		public reload(): void;
@@ -243,7 +243,7 @@ declare module 'elaracmdo' {
 		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: string, data?: Object) => void): this;
 		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: 'guildOnly' | 'nsfw') => void): this;
 		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: 'permission', data: { response?: string }) => void): this;
-		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: 'throttling', data: { throttle: Object, remaining: number }) => void): this;
+		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: 'cooldown', data: { cooldown: Object, remaining: number }) => void): this;
 		on(event: 'commandBlock', listener: (message: CommandoMessage, reason: 'clientPermissions', data: { missing: string }) => void): this;
 		on(event: 'commandCancel', listener: (command: Command, reason: string, message: CommandoMessage) => void): this;
 		on(event: 'commandError', listener: (command: Command, err: Error, message: CommandoMessage, args: object | string | string[], fromPattern: false) => void): this;
@@ -486,7 +486,7 @@ declare module 'elaracmdo' {
 		clientPermissions?: PermissionResolvable[];
 		userPermissions?: PermissionResolvable[];
 		defaultHandling?: boolean;
-		throttling?: ThrottlingOptions;
+		cooldown?: CooldownOptions;
 		args?: ArgumentInfo[];
 		argsPromptLimit?: number;
 		argsType?: string;
@@ -514,7 +514,7 @@ declare module 'elaracmdo' {
 		response?: Promise<Message>;
 	}
 
-	type ThrottlingOptions = {
+	type CooldownOptions = {
 		usages: number;
 		duration: number;
 	}

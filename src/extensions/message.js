@@ -138,12 +138,12 @@ module.exports = Structures.extend('Message', Message => {
 				 * @event CommandoClient#commandBlock
 				 * @param {CommandoMessage} message - Command message that the command is running from
 				 * @param {string} reason - Reason that the command was blocked
-				 * (built-in reasons are `guildOnly`, `nsfw`, `permission`, `throttling`, and `clientPermissions`)
+				 * (built-in reasons are `guildOnly`, `nsfw`, `permission`, `cooldown`, and `clientPermissions`)
 				 * @param {Object} [data] - Additional data associated with the block. Built-in reason data properties:
 				 * - guildOnly: none
 				 * - nsfw: none
 				 * - permission: `response` ({@link string}) to send
-				 * - throttling: `throttle` ({@link Object}), `remaining` ({@link number}) time in seconds
+				 * - cooldown: `cooldown` ({@link Object}), `remaining` ({@link number}) time in seconds
 				 * - clientPermissions: `missing` ({@link Array}<{@link string}>) permission names
 				 */
 				this.client.emit('commandBlock', this, 'guildOnly');
@@ -174,13 +174,13 @@ module.exports = Structures.extend('Message', Message => {
 				}
 			}
 
-			// Throttle the command
-			const throttle = this.command.throttle(this.author.id);
-			if(throttle && throttle.usages + 1 > this.command.throttling.usages) {
-				const remaining = (throttle.start + (this.command.throttling.duration * 1000) - Date.now()) / 1000;
-				const data = { throttle, remaining };
-				this.client.emit('commandBlock', this, 'throttling', data);
-				return this.command.onBlock(this, 'throttling', data);
+			// cooldown the command
+			const cooldown = this.command.cooldown(this.author.id);
+			if(cooldown && cooldown.usages + 1 > this.command.cooldown.usages) {
+				const remaining = (cooldown.start + (this.command.cooldown.duration * 1000) - Date.now()) / 1000;
+				const data = { cooldown, remaining };
+				this.client.emit('commandBlock', this, 'cooldown', data);
+				return this.command.onBlock(this, 'cooldown', data);
 			}
 
 			// Figure out the command arguments
@@ -220,7 +220,7 @@ module.exports = Structures.extend('Message', Message => {
 			const fromPattern = Boolean(this.patternMatches);
 
 			// Run the command
-			if(throttle) throttle.usages++;
+			if(cooldown) cooldown.usages++;
 			const typingCount = this.channel.typingCount;
 			try {
 				this.client.emit('debug', `Running command ${this.command.groupID}:${this.command.memberName}.`);

@@ -12,7 +12,7 @@ module.exports = class PingCommand extends Command {
             examples: ['ping'],
             aliases: ["pong", "pung"],
             guildOnly: false,
-            cooldown: {
+            throttling: {
                 usages: 1,
                 duration: 2
             },

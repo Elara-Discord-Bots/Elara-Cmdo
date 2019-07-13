@@ -7,7 +7,7 @@ const { permissions } = require('../util');
 /** A command that can be run in a client */
 class Command {
 	/**
-	 * @typedef {Object} ThrottlingOptions
+	 * @typedef {Object} CooldownOptions
 	 * @property {number} usages - Maximum number of usages of the command allowed in the time frame.
 	 * @property {number} duration - Amount of time to count the usages of the command within (in seconds).
 	 */
@@ -29,7 +29,7 @@ class Command {
 	 * @property {PermissionResolvable[]} [clientPermissions] - Permissions required by the client to use the command.
 	 * @property {PermissionResolvable[]} [userPermissions] - Permissions required by the user to use the command.
 	 * @property {boolean} [nsfw=false] - Whether the command is usable only in NSFW channels.
-	 * @property {ThrottlingOptions} [throttling] - Options for throttling usages of the command.
+	 * @property {CooldownOptions} [cooldown] - Options for cooldown usages of the command.
 	 * @property {boolean} [defaultHandling=true] - Whether or not the default command handling should be used.
 	 * If false, then only patterns will trigger the command.
 	 * @property {ArgumentInfo[]} [args] - Arguments for the command.
@@ -163,10 +163,10 @@ class Command {
 		this.defaultHandling = 'defaultHandling' in info ? info.defaultHandling : true;
 
 		/**
-		 * Options for throttling command usages
-		 * @type {?ThrottlingOptions}
+		 * Options for cooldown command usages
+		 * @type {?CooldownOptions}
 		 */
-		this.throttling = info.throttling || null;
+		this.cooldown = info.cooldown || null;
 
 		/**
 		 * The argument collector for the command
@@ -227,11 +227,11 @@ class Command {
 		this._globalEnabled = true;
 
 		/**
-		 * Current throttle objects for the command, mapped by user ID
+		 * Current cooldown objects for the command, mapped by user ID
 		 * @type {Map<string, Object>}
 		 * @private
 		 */
-		this._throttles = new Map();
+		this._cooldowns = new Map();
 	}
 
 	/**
@@ -285,12 +285,12 @@ class Command {
 	 * Called when the command is prevented from running
 	 * @param {CommandMessage} message - Command message that the command is running from
 	 * @param {string} reason - Reason that the command was blocked
-	 * (built-in reasons are `guildOnly`, `nsfw`, `permission`, `throttling`, and `clientPermissions`)
+	 * (built-in reasons are `guildOnly`, `nsfw`, `permission`, `cooldown`, and `clientPermissions`)
 	 * @param {Object} [data] - Additional data associated with the block. Built-in reason data properties:
 	 * - guildOnly: none
 	 * - nsfw: none
 	 * - permission: `response` ({@link string}) to send
-	 * - throttling: `throttle` ({@link Object}), `remaining` ({@link number}) time in seconds
+	 * - cooldown: `cooldown` ({@link Object}), `remaining` ({@link number}) time in seconds
 	 * - clientPermissions: `missing` ({@link Array}<{@link string}>) permission names
 	 * @returns {Promise<?Message|?Array<Message>>}
 	 */
@@ -320,7 +320,7 @@ class Command {
 				embed.setDescription(`I need the following permissions for the \`${this.name}\` command to work:\n${data.missing.map(perm => permissions[perm]).join(', ')}`)
 				return message.channel.send(embed);
 			}
-			case 'throttling': {
+			case 'cooldown': {
 			embed.setTitle(`HOLD UP!`)
 			.setDescription(`You may not use the \`${this.name}\` command again for another ${data.remaining.toFixed(1)} seconds.`)
 			return message.channel.send(embed)
@@ -352,27 +352,27 @@ class Command {
 	}
 
 	/**
-	 * Creates/obtains the throttle object for a user, if necessary (owners are excluded)
-	 * @param {string} userID - ID of the user to throttle for
+	 * Creates/obtains the cooldown object for a user, if necessary (owners are excluded)
+	 * @param {string} userID - ID of the user to cooldown for
 	 * @return {?Object}
 	 * @private
 	 */
-	throttle(userID) {
-		if(!this.throttling || this.client.isOwner(userID)) return null;
+	cooldown(userID) {
+		if(!this.cooldown || this.client.isOwner(userID)) return null;
 
-		let throttle = this._throttles.get(userID);
-		if(!throttle) {
-			throttle = {
+		let cooldown = this._cooldowns.get(userID);
+		if(!cooldown) {
+			cooldown = {
 				start: Date.now(),
 				usages: 0,
 				timeout: this.client.setTimeout(() => {
-					this._throttles.delete(userID);
-				}, this.throttling.duration * 1000)
+					this._cooldowns.delete(userID);
+				}, this.cooldown.duration * 1000)
 			};
-			this._throttles.set(userID, throttle);
+			this._cooldowns.set(userID, cooldown);
 		}
 
-		return throttle;
+		return cooldown;
 	}
 
 	/**
@@ -532,16 +532,16 @@ class Command {
 				if(!permissions[perm]) throw new RangeError(`Invalid command userPermission: ${perm}`);
 			}
 		}
-		if(info.throttling) {
-			if(typeof info.throttling !== 'object') throw new TypeError('Command throttling must be an Object.');
-			if(typeof info.throttling.usages !== 'number' || isNaN(info.throttling.usages)) {
-				throw new TypeError('Command throttling usages must be a number.');
+		if(info.cooldown) {
+			if(typeof info.cooldown !== 'object') throw new TypeError('Command cooldown must be an Object.');
+			if(typeof info.cooldown.usages !== 'number' || isNaN(info.cooldown.usages)) {
+				throw new TypeError('Command cooldown usages must be a number.');
 			}
-			if(info.throttling.usages < 1) throw new RangeError('Command throttling usages must be at least 1.');
-			if(typeof info.throttling.duration !== 'number' || isNaN(info.throttling.duration)) {
-				throw new TypeError('Command throttling duration must be a number.');
+			if(info.cooldown.usages < 1) throw new RangeError('Command cooldown usages must be at least 1.');
+			if(typeof info.cooldown.duration !== 'number' || isNaN(info.cooldown.duration)) {
+				throw new TypeError('Command cooldown duration must be a number.');
 			}
-			if(info.throttling.duration < 1) throw new RangeError('Command throttling duration must be at least 1.');
+			if(info.cooldown.duration < 1) throw new RangeError('Command cooldown duration must be at least 1.');
 		}
 		if(info.args && !Array.isArray(info.args)) throw new TypeError('Command args must be an Array.');
 		if('argsPromptLimit' in info && typeof info.argsPromptLimit !== 'number') {

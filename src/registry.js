@@ -322,8 +322,8 @@ class CommandoRegistry {
 		require("./commands/util/restart"),
 		require("./commands/util/shutdown"),
 		require("./commands/util/setname"),
-		require("./commands/util/setstatus")
-		require("./commands/util/support")
+		require("./commands/util/setstatus"),
+		require("./commands/util/support"),
 		require("./commands/util/uptime"),
 		require("./commands/util/invite"),
 		require("./commands/util/info")

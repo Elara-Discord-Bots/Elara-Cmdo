@@ -7,7 +7,7 @@ const { permissions } = require('../util');
 /** A command that can be run in a client */
 class Command {
 	/**
-	 * @typedef {Object} CooldownOptions
+	 * @typedef {Object} ThrottlingOptions
 	 * @property {number} usages - Maximum number of usages of the command allowed in the time frame.
 	 * @property {number} duration - Amount of time to count the usages of the command within (in seconds).
 	 */
@@ -29,7 +29,7 @@ class Command {
 	 * @property {PermissionResolvable[]} [clientPermissions] - Permissions required by the client to use the command.
 	 * @property {PermissionResolvable[]} [userPermissions] - Permissions required by the user to use the command.
 	 * @property {boolean} [nsfw=false] - Whether the command is usable only in NSFW channels.
-	 * @property {CooldownOptions} [cooldown] - Options for cooldown usages of the command.
+	 * @property {ThrottlingOptions} [throttling] - Options for throttling usages of the command.
 	 * @property {boolean} [defaultHandling=true] - Whether or not the default command handling should be used.
 	 * If false, then only patterns will trigger the command.
 	 * @property {ArgumentInfo[]} [args] - Arguments for the command.
@@ -163,10 +163,10 @@ class Command {
 		this.defaultHandling = 'defaultHandling' in info ? info.defaultHandling : true;
 
 		/**
-		 * Options for cooldown command usages
-		 * @type {?CooldownOptions}
+		 * Options for throttling command usages
+		 * @type {?ThrottlingOptions}
 		 */
-		this.cooldown = info.cooldown || null;
+		this.throttling = info.throttling || null;
 
 		/**
 		 * The argument collector for the command
@@ -227,11 +227,11 @@ class Command {
 		this._globalEnabled = true;
 
 		/**
-		 * Current cooldown objects for the command, mapped by user ID
+		 * Current throttle objects for the command, mapped by user ID
 		 * @type {Map<string, Object>}
 		 * @private
 		 */
-		this._cooldowns = new Map();
+		this._throttles = new Map();
 	}
 
 	/**
@@ -285,12 +285,12 @@ class Command {
 	 * Called when the command is prevented from running
 	 * @param {CommandMessage} message - Command message that the command is running from
 	 * @param {string} reason - Reason that the command was blocked
-	 * (built-in reasons are `guildOnly`, `nsfw`, `permission`, `cooldown`, and `clientPermissions`)
+	 * (built-in reasons are `guildOnly`, `nsfw`, `permission`, `throttling`, and `clientPermissions`)
 	 * @param {Object} [data] - Additional data associated with the block. Built-in reason data properties:
 	 * - guildOnly: none
 	 * - nsfw: none
 	 * - permission: `response` ({@link string}) to send
-	 * - cooldown: `cooldown` ({@link Object}), `remaining` ({@link number}) time in seconds
+	 * - throttling: `throttle` ({@link Object}), `remaining` ({@link number}) time in seconds
 	 * - clientPermissions: `missing` ({@link Array}<{@link string}>) permission names
 	 * @returns {Promise<?Message|?Array<Message>>}
 	 */
@@ -320,7 +320,7 @@ class Command {
 				embed.setDescription(`I need the following permissions for the \`${this.name}\` command to work:\n${data.missing.map(perm => permissions[perm]).join(', ')}`)
 				return message.channel.send(embed);
 			}
-			case 'cooldown': {
+			case 'throttling': {
 			embed.setTitle(`HOLD UP!`)
 			.setDescription(`You may not use the \`${this.name}\` command again for another ${data.remaining.toFixed(1)} seconds.`)
 			return message.channel.send(embed)
@@ -341,38 +341,45 @@ class Command {
 	 * @returns {Promise<?Message|?Array<Message>>}
 	 */
 	onError(err, message, args, fromPattern, result) { // eslint-disable-line no-unused-vars
-		let embed = new MessageEmbed()
+		const owners = this.client.owners;
+		const ownerList = owners ? owners.map((usr, i) => {
+			const or = i === owners.length - 1 && owners.length > 1 ? 'or ' : '';
+			return `${or}${escapeMarkdown(usr.username)}#${usr.discriminator}`;
+		}).join(owners.length > 2 ? ', ' : ' ') : '';
+
+		const invite = this.client.options.invite;
+		let ee = new MessageEmbed()
 		.setAuthor(this.client.user.tag, this.client.user.displayAvatarURL())
-		.setColor(this.client.util.colors.default)
-		.setTitle(`Command "${this.name}" **Error**`)
-		.setDescription(`\`\`\`js\n${err}\`\`\``)
-		.setFooter(`This error has been reported to the Bot Developer${this.client.owners.length === 1 ? "" : "s"}`)
-		if(!this.client.isOwner(message.author.id)) embed.addField(`Please contact ${this.client.owners.map(c => c.tag).join(', ')}`, `${this.client.options.invite ? ` in this server: ${this.client.options.invite}` : "\u200b"}`)
-		return message.channel.send(embed);
+		.setColor(`#FF0000`)
+		.setTimestamp()
+		.setTitle(`Error while running the command`)
+		.setDescription(`\`${err.name}\`\n\n${err.message}`)
+		if(!this.client.isOwner(message.author.id)) ee.addField(`Please contact ${ownerList || "The Bot Developer"}`, `${invite ? ` in this server: ${invite}` : "\u200b"}`)
+		return message.channel.send(ee);
 	}
 
 	/**
-	 * Creates/obtains the cooldown object for a user, if necessary (owners are excluded)
-	 * @param {string} userID - ID of the user to cooldown for
+	 * Creates/obtains the throttle object for a user, if necessary (owners are excluded)
+	 * @param {string} userID - ID of the user to throttle for
 	 * @return {?Object}
 	 * @private
 	 */
-	cooldown(userID) {
-		if(!this.cooldown || this.client.isOwner(userID)) return null;
+	throttle(userID) {
+		if(!this.throttling || this.client.isOwner(userID)) return null;
 
-		let cooldown = this._cooldowns.get(userID);
-		if(!cooldown) {
-			cooldown = {
+		let throttle = this._throttles.get(userID);
+		if(!throttle) {
+			throttle = {
 				start: Date.now(),
 				usages: 0,
 				timeout: this.client.setTimeout(() => {
-					this._cooldowns.delete(userID);
-				}, this.cooldown.duration * 1000)
+					this._throttles.delete(userID);
+				}, this.throttling.duration * 1000)
 			};
-			this._cooldowns.set(userID, cooldown);
+			this._throttles.set(userID, throttle);
 		}
 
-		return cooldown;
+		return throttle;
 	}
 
 	/**
@@ -532,16 +539,16 @@ class Command {
 				if(!permissions[perm]) throw new RangeError(`Invalid command userPermission: ${perm}`);
 			}
 		}
-		if(info.cooldown) {
-			if(typeof info.cooldown !== 'object') throw new TypeError('Command cooldown must be an Object.');
-			if(typeof info.cooldown.usages !== 'number' || isNaN(info.cooldown.usages)) {
-				throw new TypeError('Command cooldown usages must be a number.');
+		if(info.throttling) {
+			if(typeof info.throttling !== 'object') throw new TypeError('Command throttling must be an Object.');
+			if(typeof info.throttling.usages !== 'number' || isNaN(info.throttling.usages)) {
+				throw new TypeError('Command throttling usages must be a number.');
 			}
-			if(info.cooldown.usages < 1) throw new RangeError('Command cooldown usages must be at least 1.');
-			if(typeof info.cooldown.duration !== 'number' || isNaN(info.cooldown.duration)) {
-				throw new TypeError('Command cooldown duration must be a number.');
+			if(info.throttling.usages < 1) throw new RangeError('Command throttling usages must be at least 1.');
+			if(typeof info.throttling.duration !== 'number' || isNaN(info.throttling.duration)) {
+				throw new TypeError('Command throttling duration must be a number.');
 			}
-			if(info.cooldown.duration < 1) throw new RangeError('Command cooldown duration must be at least 1.');
+			if(info.throttling.duration < 1) throw new RangeError('Command throttling duration must be at least 1.');
 		}
 		if(info.args && !Array.isArray(info.args)) throw new TypeError('Command args must be an Array.');
 		if('argsPromptLimit' in info && typeof info.argsPromptLimit !== 'number') {

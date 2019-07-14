@@ -350,10 +350,10 @@ class Command {
 		const invite = this.client.options.invite;
 		let ee = new MessageEmbed()
 		.setAuthor(this.client.user.tag, this.client.user.displayAvatarURL())
-		.setColor(`#FF0000`)
+		.setColor(this.client.util.colors.default)
 		.setTimestamp()
-		.setTitle(`Error while running the command`)
-		.setDescription(`\`${err.name}\`\n\n${err.message}`)
+		.setTitle(`Command "${message.command.name}" **Error**`)
+		.setDescription(`\`\`\`js\n${err}\`\`\``)
 		if(!this.client.isOwner(message.author.id)) ee.addField(`Please contact ${ownerList || "The Bot Developer"}`, `${invite ? ` in this server: ${invite}` : "\u200b"}`)
 		return message.channel.send(ee);
 	}

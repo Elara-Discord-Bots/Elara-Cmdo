@@ -2,7 +2,10 @@ const {MessageEmbed} = require('discord.js'),
 	  {Command, util: {escapeRegex}, eutil} = require('elaracmdo'),
 	  {exec} = require('child_process'),
 	  util = require('util'),
+      	  moment = require("moment"),
+          ms = require("ms"),
 	  time = [];
+require("moment-duration-format")
 module.exports = class EvalCommand extends Command {
 	constructor(client) {
 		super(client, {

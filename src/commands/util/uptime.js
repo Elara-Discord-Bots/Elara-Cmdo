@@ -30,7 +30,7 @@ module.exports = class PingCommand extends Command {
             .setFooter(msg.author.tag, msg.author.displayAvatarURL())
             .setDescription(`${moment.duration(this.client.uptime).format(" D [days], H [hrs], m [mins], s [secs]")}`)
             .setAuthor(this.client.user.tag, this.client.user.displayAvatarURL())
-        message.channel.send(embed);
+        msg.channel.send(embed);
 	       }catch(e){
         this.client.error(this.client, msg, e);
         this.client.f.logger(this.client, msg, e.stack)

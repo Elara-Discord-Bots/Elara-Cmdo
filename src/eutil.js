@@ -231,20 +231,17 @@ const dcolors = {
     " You will be invited to an exciting event."
 ],
       emojis = {
-    "sreact": "476629550797684736",
-    "nreact": "482868924573155349",
-    "rload": "426956230582599690",
-    "rplan": "558433500420898846",
-    "semoji": "<a:success:476629550797684736>",
-    "eplan": "<:Planned:558433500420898846>",
-    "nemoji": "<a:XX:482868924573155349>",
-    "eload": "<a:Dots:426956230582599690>",
-    "robot": "<:Robot:520773153753137162>",
-    "human": "<:humanno:521558500351148052>",
-    "eminus": "<:minus:552471429199953921>",
-    "rminus": "552471429199953921",
-    "eplus": "<:plus:552471361960804362>",
-    "rplus": "552471361960804362"
+    "sreact": "✅",
+    "nreact": "❌",
+    "rload": "⏱",
+    "semoji": "✅",
+    "nemoji": "❌",
+    "eload": "⏱",
+    "robot": "🤖",
+    "eminus": "❌",
+    "rminus": "❌",
+    "eplus": "✅",
+    "rplus": "❌"
 },
       status = {
     "online": "<a:online:506430888670920704>",

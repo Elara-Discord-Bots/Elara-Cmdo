@@ -118,8 +118,8 @@ declare module 'elaracmdo' {
 		public static usage(command: string, prefix?: string, user?: User): string;
 	}
 	export class Event {
-		public constructor(client: CommandoClient, info: EventInfo);
-		private static check(client: CommandoClient, info: EventInfo);
+		public constructor(client: CommandoClient, event: EventInfo);
+		private static check(client: CommandoClient, event: EventInfo);
 		public readonly client: CommandoClient;
 		public name: string;
 		public enabled: boolean;
@@ -505,7 +505,7 @@ declare module 'elaracmdo' {
 		unknown?: boolean;
 	};
 	type EventInfo = {
-		event: string;
+		name: string;
 		enabled?: boolean
 	}
 	type CommandoClientOptions = ClientOptions & {

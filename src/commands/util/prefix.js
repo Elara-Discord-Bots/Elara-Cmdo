@@ -30,8 +30,9 @@ module.exports = class NCommand extends Command {
         if(await this.client.f.channel(this.client, message) === true) return this.client.f.cmdschannel(message);
         
         try{
-        let e = new MessageEmbed().setColor(message.guild.color);
+        let e = new MessageEmbed().setColor(this.client.util.colors.default)
         if(message.guild){
+           e.setColor(message.guild.color);
           this.client.db.findOne({guildID: message.guild.id}, async (err, db) => {
             if(db){
               if(prefix !== ""){

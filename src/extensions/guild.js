@@ -26,15 +26,13 @@ module.exports = Structures.extend('Guild', Guild => {
 			/**
 			 * Short cut to the guild color
 			 * @name CommandoGuild#color
-			 * @type {string}
-			 * @private
+			 * @type {?string}
 			 */
-			this.color = '#00ffe9';
+			this.color = this.me.client.util.colors.default;
 			/**
 			 * Short cut to the guild currency
 			 * @name CommandoGuild#currency
 			 * @type {string}
-			 * @private
 			 */
 			this.currency = "Coins";
 		}

@@ -27,7 +27,7 @@ module.exports = class NCommand extends Command {
             `[No Permissions](https://discordapp.com/oauth2/authorize?client_id=${this.client.user.id}&permissions=0&scope=bot)`
         ]
         let e = new Discord.MessageEmbed()
-        .setColor(this.client.util.colors.cyan)
+        .setColor(message.guild ? message.guild.color : this.client.util.colors.default)
         .setAuthor(`Bot Invites`, this.client.user.displayAvatarURL())
         .setDescription(links.join('\n') + `\n[Support Server](${this.client.options.invite})`)
         return message.channel.send(e)

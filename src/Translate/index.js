@@ -2,6 +2,7 @@ const languages = require('./languages');
 const tokenGenerator = require('./tokenGenerator');
 const querystring = require('querystring');
 const got = require('got');
+const tunnel = require('tunnel');
 
 /**
  * @function translate
@@ -68,17 +69,26 @@ async function translate(text, options) {
         `${url}?${querystring.stringify(data)}`,
         {
           method: 'POST',
-          body: {
+          body: JSON.stringify({
             q: text
-          }
+          })
         }
       ];
-      requestOptions[1] = JSON.stringify(requestOptions[1]);
     }
     else {
       requestOptions = [ url ];
     }
 
+    let proxies = [];
+    if (Array.isArray(options.proxies)) {
+      proxies = options.proxies;
+
+      requestOptions[1] = {
+        agent: tunnel.httpOverHttp({
+          proxy: proxies[Math.floor(Math.random() * proxies.length)]
+        })
+      };
+    }
     // Request translation from Google Translate.
     let response = await got(...requestOptions);
 

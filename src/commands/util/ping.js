@@ -25,12 +25,12 @@ module.exports = class PingCommand extends Command {
         if(await this.client.f.channel(this.client, msg) === true) return this.client.f.cmdschannel(msg);
         try{
         let loadingembed = new Discord.MessageEmbed()
-            .setColor(this.client.util.colors.cyan)
+            .setColor(msg.guild ? msg.guild.color : this.client.util.colors.default)
             .setDescription(`${this.client.util.emojis.eload} Loading.`)
             .setTimestamp()
         const message = await msg.channel.send(loadingembed);
         let embed = new Discord.MessageEmbed()
-            .setColor(this.client.util.colors.cyan)
+            .setColor(msg.guild ? msg.guild.color : this.client.util.colors.default)
             .setTitle(`${this.client.util.emojis.robot} Status ${this.client.util.emojis.robot}`)
             .setFooter(msg.author.tag, msg.author.displayAvatarURL())
             .addField(`Message Latency`, `${message.createdTimestamp - msg.createdTimestamp}ms`, true)

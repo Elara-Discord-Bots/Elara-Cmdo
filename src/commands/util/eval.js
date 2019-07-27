@@ -141,6 +141,15 @@ async run(message, args) {
 
 		let hrDiff;
 		try {
+			async function then(args, depth = 0){
+				let hm = await args;
+				let emg = new MessageEmbed()
+				.setTitle(`Response`)
+				.setDescription(`\`\`\`js\n${util.inspect(hm, {depth: depth})}\`\`\``)
+				.setColor(eutil.colors.default)
+				.setTimestamp()
+				message.channel.send(emg)
+			}
 			const hrStart = process.hrtime();
 			this.lastResult = eval(args.script);
 			hrDiff = process.hrtime(hrStart);

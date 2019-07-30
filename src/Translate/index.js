@@ -1,163 +1,119 @@
-const languages = require('./languages');
-const tokenGenerator = require('./tokenGenerator');
-const querystring = require('querystring');
-const got = require('got');
-const tunnel = require('tunnel');
+var querystring = require('querystring');
 
-/**
- * @function translate
- * @param {String} text The text to be translated.
- * @param {Object} options The options object for the translator.
- * @returns {Object} The result containing the translation.
- */
-async function translate(text, options) {
-  try {
-    if (typeof options !== 'object') options = {};
-    text = String(text);
+var got = require('got');
+var token = require('./tokens');
 
-    // Check if a lanugage is in supported; if not, throw an error object.
-    let error;
-    [ options.from, options.to ].forEach((lang) => {
-      if (lang && !languages.isSupported(lang)) {
-        error = new Error();
-        error.code = 400;
-        error.message = `The language '${lang}' is not supported.`;
-      }
+var languages = require('./languages');
+
+function translate(text, opts, gotopts) {
+    opts = opts || {};
+    gotopts = gotopts || {};
+    var e;
+    [opts.from, opts.to].forEach(function (lang) {
+        if (lang && !languages.isSupported(lang)) {
+            e = new Error();
+            e.code = 400;
+            e.message = 'The language \'' + lang + '\' is not supported';
+        }
     });
-    if (error) throw error;
+    if (e) {
+        return new Promise(function (resolve, reject) {
+            reject(e);
+        });
+    }
 
-    // If options object doesn't have 'from' language, set it to 'auto'.
-    if (!options.hasOwnProperty('from')) options.from = 'auto';
-    // If options object doesn't have 'to' language, set it to 'en'.
-    if (!options.hasOwnProperty('to')) options.to = 'en';
-    // If options object has a 'raw' property evaluating to true, set it to true.
-    options.raw = Boolean(options.raw);
+    opts.from = opts.from || 'auto';
+    opts.to = opts.to || 'en';
+    opts.tld = opts.tld || 'com';
 
-    // Get ISO 639-1 codes for the languages.
-    options.from = languages.getISOCode(options.from);
-    options.to = languages.getISOCode(options.to);
+    opts.from = languages.getCode(opts.from);
+    opts.to = languages.getCode(opts.to);
 
-    // Generate Google Translate token for the text to be translated.
-    let token = await tokenGenerator.generate(text);
-
-    // URL & query string required by Google Translate.
-    let url = 'https://translate.google.com/translate_a/single';
-    let data = {
-      client: 'gtx',
-      sl: options.from,
-      tl: options.to,
-      hl: options.to,
-      dt: [ 'at', 'bd', 'ex', 'ld', 'md', 'qca', 'rw', 'rm', 'ss', 't' ],
-      ie: 'UTF-8',
-      oe: 'UTF-8',
-      otf: 1,
-      ssel: 0,
-      tsel: 0,
-      kc: 7,
-      q: text,
-      [token.name]: token.value
-    };
-
-    // Append query string to the request URL.
-    url = `${url}?${querystring.stringify(data)}`;
-
-    let requestOptions;
-    // If request URL is greater than 2048 characters, use POST method.
-    if (url.length > 2048) {
-      delete data.q;
-      requestOptions = [
-        `${url}?${querystring.stringify(data)}`,
-        {
-          method: 'POST',
-          body: JSON.stringify({
+    return token.get(text, {tld: opts.tld}).then(function (token) {
+        var url = 'https://translate.google.' + opts.tld + '/translate_a/single';
+        var data = {
+            client: opts.client || 't',
+            sl: opts.from,
+            tl: opts.to,
+            hl: opts.to,
+            dt: ['at', 'bd', 'ex', 'ld', 'md', 'qca', 'rw', 'rm', 'ss', 't'],
+            ie: 'UTF-8',
+            oe: 'UTF-8',
+            otf: 1,
+            ssel: 0,
+            tsel: 0,
+            kc: 7,
             q: text
-          })
-        }
-      ];
-    }
-    else {
-      requestOptions = [ url ];
-    }
+        };
+        data[token.name] = token.value;
 
-    let proxies = [];
-    if (Array.isArray(options.proxies)) {
-      proxies = options.proxies;
+        return url + '?' + querystring.stringify(data);
+    }).then(function (url) {
+        return got(url, gotopts).then(function (res) {
+            var result = {
+                text: '',
+                pronunciation: '',
+                from: {
+                    language: {
+                        didYouMean: false,
+                        iso: ''
+                    },
+                    text: {
+                        autoCorrected: false,
+                        value: '',
+                        didYouMean: false
+                    }
+                },
+                raw: ''
+            };
 
-      requestOptions[1] = {
-        agent: tunnel.httpOverHttp({
-          proxy: proxies[Math.floor(Math.random() * proxies.length)]
-        })
-      };
-    }
-    // Request translation from Google Translate.
-    let response = await got(...requestOptions);
+            if (opts.raw) {
+                result.raw = res.body;
+            }
 
-    let result = {
-      text: '',
-      from: {
-        language: {
-          didYouMean: false,
-          iso: ''
-        },
-        text: {
-          autoCorrected: false,
-          value: '',
-          didYouMean: false
-        }
-      },
-      raw: ''
-    };
+            var body = JSON.parse(res.body);
+            body[0].forEach(function (obj) {
+                if (obj[0]) {
+                    result.text += obj[0];
+                }
+                if (obj[2]) {
+                    result.pronunciation += obj[2];
+                }
+            });
 
-    // If user requested a raw output, add the raw response to the result
-    if (options.raw) {
-      result.raw = response.body;
-    }
+            if (body[2] === body[8][0][0]) {
+                result.from.language.iso = body[2];
+            } else {
+                result.from.language.didYouMean = true;
+                result.from.language.iso = body[8][0][0];
+            }
 
-    // Parse string body to JSON and add it to result object.
+            if (body[7] && body[7][0]) {
+                var str = body[7][0];
 
-    let body = JSON.parse(response.body);
-    body[0].forEach((obj) => {
-      if (obj[0]) {
-        result.text += obj[0];
-      }
+                str = str.replace(/<b><i>/g, '[');
+                str = str.replace(/<\/i><\/b>/g, ']');
+
+                result.from.text.value = str;
+
+                if (body[7][5] === true) {
+                    result.from.text.autoCorrected = true;
+                } else {
+                    result.from.text.didYouMean = true;
+                }
+            }
+
+            return result;
+        }).catch(function (err) {
+            err.message += `\nUrl: ${url}`;
+            if (err.statusCode !== undefined && err.statusCode !== 200) {
+                err.code = 'BAD_REQUEST';
+            } else {
+                err.code = 'BAD_NETWORK';
+            }
+            throw err;
+        });
     });
-
-    if (body[2] === body[8][0][0]) {
-      result.from.language.iso = body[2];
-    }
-    else {
-      result.from.language.didYouMean = true;
-      result.from.language.iso = body[8][0][0];
-    }
-
-    if (body[7] && body[7][0]) {
-      let str = body[7][0];
-
-      str = str.replace(/<b><i>/g, '[');
-      str = str.replace(/<\/i><\/b>/g, ']');
-
-      result.from.text.value = str;
-
-      if (body[7][5] === true) {
-        result.from.text.autoCorrected = true;
-      }
-      else {
-        result.from.text.didYouMean = true;
-      }
-    }
-
-    return result;
-  }
-  catch (e) {
-    if (e.name === 'HTTPError') {
-      let error = new Error();
-      error.name = e.name;
-      error.statusCode = e.statusCode;
-      error.statusMessage = e.statusMessage;
-      throw error;
-    }
-    throw e;
-  }
 }
 
 module.exports = translate;

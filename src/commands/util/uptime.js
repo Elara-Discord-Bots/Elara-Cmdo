@@ -11,17 +11,17 @@ module.exports = class PingCommand extends Command {
             description: 'Shows the uptime for the bot',
             examples: [`${client.commandPrefix}uptime`],
             aliases: [],
-	          guildOnly: false,
+	    guildOnly: false,
             throttling: {
-                usages: 1,
-                duration: 2
+                usages: Globalcooldown.usage,
+                duration: Globalcooldown.duration
             },
         });
     }
 
     async run(msg) {
 	   try{
-	      if(await this.client.b(this.client, msg) === true) return;
+	if(await this.client.b(this.client, msg) === true) return;
         if(await this.client.m(this.client) === true && !this.client.isOwner(msg.author.id)) return this.client.f.msg(msg)
         if(await this.client.f.channel(this.client, msg) === true) return this.client.f.cmdschannel(msg);
         let embed = new Discord.MessageEmbed()

@@ -1,6 +1,7 @@
 const {MessageEmbed} = require('discord.js'),
 	  {Command, util: {escapeRegex}, eutil} = require('elaracmdo'),
 	  {exec} = require('child_process'),
+	  config = require('../../../../../src/util/config'),
 	  util = require('util'),
       	  moment = require("moment"),
           ms = require("ms"),
@@ -34,7 +35,8 @@ async run(message, args) {
 	  const bot = message.client, 
 			msg = message,
             client = message.client,
-            lastResult = this.lastResult,
+			lastResult = this.lastResult,
+			f = client.f,
             emojis = message.client.emojis,
             channels = message.client.channels,
             guilds = message.client.guilds,
@@ -143,12 +145,37 @@ async run(message, args) {
 		try {
 			async function then(args, depth = 0){
 				let hm = await args;
+				let res = await util.inspect(hm, {depth: depth});
+				let eh = await res
+				.replace(new RegExp(config.token, "g"), "")
+				.replace(new RegExp(config.apis.dbl, "g"), "")
+				.replace(new RegExp(config.mongo, "gi"), "")
+				.replace(new RegExp(config.mongo, "g"), "")
+				.replace(new RegExp(config.webhooks.mentions, "g"), "")
+				.replace(new RegExp(config.webhooks.log, "g"), "")
+				.replace(new RegExp(config.webhooks.error, "g"), "")
+				.replace(new RegExp(config.webhooks.servers, "g"), "")
+				.replace(new RegExp(config.webhooks.action, "g"), "")
+				.replace(new RegExp(config.apis.paladins.devID, "g"), "")
+				.replace(new RegExp(config.apis.paladins.key, "g"), "")
+				.replace(new RegExp(config.apis.IMDB, "g"), "")
+				.replace(new RegExp(config.apis.api, "g"), "")
+				.replace(new RegExp(config.apis.fortnite, "g"), "")
+				.replace(new RegExp(config.apis.giphy, "g"), "")
+				.replace(new RegExp(config.apis.twitch, "g"), "")
+				.replace(new RegExp(config.apis.youtube, "g"), "")
+				
 				let emg = new MessageEmbed()
 				.setTitle(`Response`)
-				.setDescription(`\`\`\`js\n${util.inspect(hm, {depth: depth})}\`\`\``)
-				.setColor(eutil.colors.default)
+				if(res.length >= 2040){
+				emg.setDescription(await f.bin("OutPut", eh))
+				}else{
+				emg.setDescription(`\`\`\`js\n${eh}\`\`\``)
+				}
+				emg.setColor(eutil.colors.default)
 				.setTimestamp()
 				message.channel.send(emg)
+				
 			}
 			const hrStart = process.hrtime();
 			this.lastResult = eval(args.script);
@@ -165,6 +192,13 @@ async run(message, args) {
                 for (const re of response) msg.say(re);
                 return null;
             } else {
+				if(response.length >= 2040){
+					evalembed
+					.setTitle(`Result`)
+					.setDescription(await this.client.f.bin('Output', await this.pastebinresponse(this.lastResult, hrDiff, args.script, message.editable)))
+					.setFooter(`Executed in: ${time[0]}`)
+					return message.say(evalembed);
+				}
 				evalembed
 				.setTitle(`Result`)
 				.setDescription(response)
@@ -172,6 +206,13 @@ async run(message, args) {
                 return message.say(evalembed);
             }
         }else{
+			if(response.length >= 2040){
+				evalembed
+				.setTitle(`Result`)
+				.setDescription(await this.client.f.bin('Output', await this.pastebinresponse(this.lastResult, hrDiff, args.script, message.editable)))
+				.setFooter(`Executed in: ${time[0]}`)
+				return message.say(evalembed);
+			}
             evalembed
             .setTitle(`Result`)
 			.setDescription(response)
@@ -193,6 +234,21 @@ async run(message, args) {
 			time.push(`${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.`)
 			}
 			return `\`\`\`js\n${inspected}\`\`\``;
+		}
+	}
+	pastebinresponse(result, hrDiff, input = null, editable = false) {
+		const inspected = util.inspect(result, { depth: 0 }).replace(new RegExp('!!NL!!', 'g'), '\n').replace(this.sensitivePattern, 'no u');
+		if(input) {
+			if(hrDiff){
+			time.push(`${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.`)
+			}
+			return `${editable ? `${input}` : ''}
+			${inspected}`;
+		} else {
+			if(hrDiff){
+			time.push(`${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.`)
+			}
+			return inspected;
 		}
 	}
 

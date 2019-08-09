@@ -543,13 +543,7 @@ class Command {
 		}
 		if(info.throttling) {
 			if(typeof info.throttling !== 'object') throw new TypeError('Command throttling must be an Object.');
-			if(isNaN(info.throttling.usages)) {
-				throw new TypeError('Command throttling usages must be a number.');
-			}
 			if(info.throttling.usages < 1) throw new RangeError('Command throttling usages must be at least 1.');
-			if(isNaN(info.throttling.duration)) {
-				throw new TypeError('Command throttling duration must be a number.');
-			}
 			if(info.throttling.duration < 1) throw new RangeError('Command throttling duration must be at least 1.');
 		}
 		if(info.args && !Array.isArray(info.args)) throw new TypeError('Command args must be an Array.');

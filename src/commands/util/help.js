@@ -15,8 +15,8 @@ module.exports = class HelpCommand extends Command {
             guarded: true,
             guildOnly: true,
             throttling: {
-                usages: 1,
-                duration: 2
+                usages: Globalcooldown.usage,
+                duration: Globalcooldown.duration
             },
             args: [{
                 key: 'command',

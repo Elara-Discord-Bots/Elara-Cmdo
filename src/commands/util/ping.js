@@ -13,8 +13,8 @@ module.exports = class PingCommand extends Command {
             aliases: ["pong", "pung"],
             guildOnly: false,
             throttling: {
-                usages: 1,
-                duration: 2
+                usages: Globalcooldown.usage,
+                duration: Globalcooldown.duration
             },
         });
     }

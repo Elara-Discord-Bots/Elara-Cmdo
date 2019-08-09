@@ -12,8 +12,8 @@ module.exports = class BotinfoCommand extends Command {
             description: "Gives you the bots information",
             examples: [`${client.commandPrefix}botinfo`],
             throttling: {
-                usages: 1,
-                duration: 2
+                usages: Globalcooldown.usage,
+                duration: Globalcooldown.duration
             },
         })
 

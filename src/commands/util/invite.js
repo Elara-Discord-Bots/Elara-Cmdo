@@ -8,8 +8,8 @@ module.exports = class NCommand extends Command {
             examples: [`${client.commandPrefix}invite`],
             description: "Gives you a invite for the bot.",
             throttling: {
-                usages: 1,
-                duration: 2
+                usages: Globalcooldown.usage,
+                duration: Globalcooldown.duration
             },
             group: "bot"
         })

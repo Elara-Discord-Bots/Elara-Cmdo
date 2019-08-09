@@ -10,8 +10,8 @@ module.exports = class SCommand extends Command {
             description: "Gives you the invite to the support server",
             group: "bot",
             throttling: {
-                usages: 1,
-                duration: 2
+                usages: Globalcooldown.usage,
+                duration: Globalcooldown.duration
             },
         })
     }

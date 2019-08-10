@@ -25,10 +25,6 @@ module.exports = class NCommand extends Command {
 })
 }
         async run(message, {prefix}) {
-        if(await this.client.b(this.client, message) === true) return;
-        if(await this.client.m(this.client) === true && !this.client.isOwner(message.author.id)) return this.client.f.msg(message)
-        if(await this.client.f.channel(this.client, message) === true) return this.client.f.cmdschannel(message);
-        
         try{
         let e = new MessageEmbed().setColor(this.client.util.colors.default)
         if(message.guild){

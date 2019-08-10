@@ -21,9 +21,6 @@ module.exports = class PingCommand extends Command {
 
     async run(msg) {
 	   try{
-	if(await this.client.b(this.client, msg) === true) return;
-        if(await this.client.m(this.client) === true && !this.client.isOwner(msg.author.id)) return this.client.f.msg(msg)
-        if(await this.client.f.channel(this.client, msg) === true) return this.client.f.cmdschannel(msg);
         let embed = new Discord.MessageEmbed()
             .setColor(msg.guild ? msg.guild.color : this.client.util.colors.default)
             .setTitle(`${this.client.util.emojis.robot} Uptime ${this.client.util.emojis.robot}`)

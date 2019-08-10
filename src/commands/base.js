@@ -325,6 +325,15 @@ class Command {
 			.setDescription(`You may not use the \`${this.name}\` command again for another ${data.remaining.toFixed(1)} seconds.`)
 			return message.channel.send(embed)
 			}
+			case "blacklist": {
+				return null;
+			};
+			case "maintenance":{
+				return message.client.f.msg(message);
+			};
+			case "channel": {
+				return message.client.f.cmdschannel(message);
+			}
 			default:
 				return null;
 		}

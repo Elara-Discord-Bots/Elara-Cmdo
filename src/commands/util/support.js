@@ -16,9 +16,6 @@ module.exports = class SCommand extends Command {
         })
     }
     async run(message) {
-        if(await this.client.b(this.client, message) === true) return;
-        if(await this.client.m(this.client) === true && !this.client.isOwner(message.author.id)) return this.client.f.msg(message)
-        if(await this.client.f.channel(this.client, message) === true) return this.client.f.cmdschannel(message);
         let embed = new Discord.MessageEmbed()
             .setAuthor(`Elara Support`, "https://cdn.discordapp.com/icons/499409162661396481/28c6fa39e722e2c0aea60f15ca105c1d.png?size=2048")
             .setColor(message.guild ? message.guild.color : this.client.util.colors.default)

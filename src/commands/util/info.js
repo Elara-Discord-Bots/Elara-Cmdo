@@ -19,9 +19,6 @@ module.exports = class BotinfoCommand extends Command {
 
     }
     async run(message) {
-        if(await this.client.b(this.client, message) === true) return;
-        if(await this.client.m(this.client) === true && !this.client.isOwner(message.author.id)) return this.client.f.msg(message)
-        if(await this.client.f.channel(this.client, message) === true) return this.client.f.cmdschannel(message);
         try{
         let prefix = message.guild ? message.guild._commandPrefix : this.client.commandPrefix;
         let bot = this.client.user;

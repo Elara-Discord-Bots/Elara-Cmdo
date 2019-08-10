@@ -130,7 +130,10 @@ module.exports = Structures.extend('Message', Message => {
 			if(this.channel.type === 'text' && !this.guild.members.has(this.client.user.id)) {
 				await this.guild.members.fetch(this.client.user.id);
 			}
-
+			if(await this.client.f.GlobalDisabled(this.client, this.command.name) === true){
+				this.client.emit("commandBlock", this, "GlobalDisable");
+				return this.command.onBlock(this, "GlobalDisable")
+			}
 			// Make sure the command is usable in this context
 			if(await this.client.b(this.client, this) === true){
 				this.client.emit('commandBlock', this, "blacklist");

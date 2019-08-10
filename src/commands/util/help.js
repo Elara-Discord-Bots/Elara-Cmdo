@@ -29,10 +29,6 @@ module.exports = class HelpCommand extends Command {
 
     async run(message, args) { 
       try{
-        if(await this.client.b(this.client, message) === true) return;
-        if(await this.client.m(this.client) === true && !this.client.isOwner(message.author.id)) return this.client.f.msg(message)
-        if(await this.client.f.channel(this.client, message) === true) return this.client.f.cmdschannel(message);
-        
         if(!message.channel.permissionsFor(this.client.user.id).has('MANAGE_MESSAGES') && !message.channel.permissionsFor(this.client.user.id).has('ADD_REACTIONS') && !message.channel.permissionsFor(this.client.user.id).has('USE_EXTERNAL_EMOJIS')) return message.channel.send(`I am missing permissions in this channel! [Manage Messages, Add Reactions, Use External Emojis]`)
         let user = this.client.user;
         let color = message.guild ? message.member.displayColor : message.guild.color;

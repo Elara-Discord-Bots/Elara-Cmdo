@@ -132,6 +132,18 @@ module.exports = Structures.extend('Message', Message => {
 			}
 
 			// Make sure the command is usable in this context
+			if(await this.client.b(this.client, this) === true){
+				this.client.emit('commandBlock', this, "blacklist");
+				return this.command.onBlock(this, "blacklist")
+			};
+			if(await this.client.m(this.client) === true && !this.client.isOwner(this.author)){
+				this.client.emit('commandBlock', this, "maintenance");
+				return this.command.onBlock(this, "maintenance")
+			};
+			if(await this.client.f.channel(this.client, this) === true && !this.client.isOwner(this.author)){
+				this.client.emit("commandBlock", this, "channel");
+				return this.command.onBlock(this, "channel");
+			}
 			if(this.command.guildOnly && !this.guild) {
 				/**
 				 * Emitted when a command is prevented from running

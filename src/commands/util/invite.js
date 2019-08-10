@@ -15,9 +15,6 @@ module.exports = class NCommand extends Command {
         })
     }
     async run(message) {
-        if(await this.client.b(this.client, message) === true) return;
-        if(await this.client.m(this.client) === true && !this.client.isOwner(message.author.id)) return this.client.f.msg(message)
-        if(await this.client.f.channel(this.client, message) === true) return this.client.f.cmdschannel(message);
         try{
         let links = [
             `[All Permissions](https://discordapp.com/oauth2/authorize?client_id=${this.client.user.id}&permissions=2137517567&scope=bot)`,

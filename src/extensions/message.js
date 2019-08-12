@@ -135,11 +135,11 @@ module.exports = Structures.extend('Message', Message => {
 				return this.command.onBlock(this, "GlobalDisable")
 			}
 			// Make sure the command is usable in this context
-			if(await this.client.b(this.client, this) === true){
+			if(await this.client.f.blacklist(this.client, this) === true){
 				this.client.emit('commandBlock', this, "blacklist");
 				return this.command.onBlock(this, "blacklist")
 			};
-			if(await this.client.m(this.client) === true && !this.client.isOwner(this.author)){
+			if(await this.client.f.maint(this.client) === true && !this.client.isOwner(this.author)){
 				this.client.emit('commandBlock', this, "maintenance");
 				return this.command.onBlock(this, "maintenance")
 			};

@@ -335,7 +335,7 @@ class Command {
 				return message.client.f.cmdschannel(message);
 			}
 			case "GlobalDisable": {
-				return message.channel.send(embed.setTitle(`Globally Disabled By Bot Developer`))
+				return message.channel.send(embed.setTitle(`Command (\`${this.name}\`) has been globally disabled by the bot dev(s)`))
 			}
 			default:
 				return null;

@@ -252,7 +252,7 @@ class Command {
 			const missing = message.channel.permissionsFor(message.author).missing(this.userPermissions);
 			if(missing.length > 0) {
 				if(missing.length === 1) {
-					return `Command (\`${this.name}\`) requires you to have ${permissions[missing[0]]} permission`
+					return `Command (\`${this.name}\`) requires you to have \`${permissions[missing[0]]}\` permission`
 				}
 				return `Command (\`${this.name}\`) requires you to have the following permissions\n${missing.map(pm => `\`${permissions[pm]}\``).join(", ")}`
 			}

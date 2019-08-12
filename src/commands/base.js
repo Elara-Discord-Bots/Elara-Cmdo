@@ -308,7 +308,10 @@ class Command {
 					embed.setDescription(`${this.name}, can't be used in this channel.`)
 					return message.channel.send(embed);
 			case 'permission': {
-				if(data.response) return message.reply(data.response);
+				if(data.response){
+					embed.setDescription(data.response);
+					return message.channel.send(embed)
+				}
 				embed.setDescription(`You don't have permission to use command: ${this.name}`)
 				return message.channel.send(embed);
 			}

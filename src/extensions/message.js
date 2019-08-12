@@ -130,7 +130,7 @@ module.exports = Structures.extend('Message', Message => {
 			if(this.channel.type === 'text' && !this.guild.members.has(this.client.user.id)) {
 				await this.guild.members.fetch(this.client.user.id);
 			}
-			if(await this.client.f.GlobalDisabled(this.client, this.command.name) === true && !this.client.isOwner(this.author.id)){
+			if(await this.client.GlobalCmds.includes(this.command.name) === true && !this.client.isOwner(this.author.id)){
 				this.client.emit("commandBlock", this, "GlobalDisable");
 				return this.command.onBlock(this, "GlobalDisable")
 			}

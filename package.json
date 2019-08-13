@@ -1,6 +1,6 @@
 {
 	"name": "elaracmdo",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "Commando Modified Framework.",
 	"license": "",
 	"author": "Boop",
@@ -34,7 +34,7 @@
 	"peerDependencies": {
 		"@types/better-sqlite3": "^5.0.0",
 		"better-sqlite3": "^5.0.0",
-		"discord.js": "^12.0.0",
+		"discord.js": "github:discordjs/discord.js",
 		"sqlite": "^3.0.0"
 	},
 	"engines": {

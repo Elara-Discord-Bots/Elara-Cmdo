@@ -170,7 +170,7 @@ async run(message, args) {
 				if(res.length >= 2040){
 				emg.setDescription(await f.bin("OutPut", eh))
 				}else{
-				emg.setDescription(`\`\`\`js\n${eh}\`\`\``)
+				emg.setDescription(`${eh.includes("https://hasteb.in/") ? eh : `\`\`\`js\n${eh}\`\`\``}`)
 				}
 				emg.setColor(eutil.colors.default)
 				.setTimestamp()

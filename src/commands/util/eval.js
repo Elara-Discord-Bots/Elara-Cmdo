@@ -168,9 +168,9 @@ async run(message, args) {
 				let emg = new MessageEmbed()
 				.setTitle(`Response`)
 				if(res.length >= 2040){
-				emg.setDescription(await f.bin("OutPut", eh))
+				emg.setDescription(await f.bin("Output", eh))
 				}else{
-				emg.setDescription(`${eh.includes("https://hasteb.in/") ? eh : `\`\`\`js\n${eh}\`\`\``}`)
+				emg.setDescription(`${eh.includes("https://hasteb.in/") ? `${eh.replace(/'|'/gi, "")}` : `\`\`\`js\n${eh}\`\`\``}`)
 				}
 				emg.setColor(eutil.colors.default)
 				.setTimestamp()

@@ -240,6 +240,7 @@ declare module 'elaracmdo' {
 		public options: CommandoClientOptions;
 		public readonly owners: User[];
 		public provider: SettingProvider;
+		public handleEvent: object;
 		public registry: CommandoRegistry;
 		public settings: GuildSettingsHelper;
 
@@ -514,6 +515,7 @@ declare module 'elaracmdo' {
 		nonCommandEditable?: boolean;
 		owner?: string | string[] | Set<string>;
 		invite?: string;
+		
 	};
 
 	type CommandResolvable = Command | string;

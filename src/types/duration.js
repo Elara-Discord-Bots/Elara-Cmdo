@@ -1,5 +1,5 @@
 const ArgumentType = require('./base');
-module.exports = class DurationType extends ArgumentType {
+module.exports = class duration extends ArgumentType {
  
   constructor(client) {
     super(client, 'duration');

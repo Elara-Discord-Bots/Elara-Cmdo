@@ -8,7 +8,7 @@ declare module 'SyncSqlite' {
 	export interface Statement {}
 }
 
-declare module 'discord.js-commando' {
+declare module 'elaracmdo' {
 	import { Channel, Client, ClientOptions, Collection, DMChannel, Emoji, Guild, GuildChannel, GuildMember, GuildResolvable, Message, MessageAttachment, MessageEmbed, MessageMentions, MessageOptions, MessageReaction, PermissionResolvable, PermissionString, ReactionEmoji, Role, Snowflake, StringResolvable, TextChannel, User, UserResolvable, VoiceState, Webhook } from 'discord.js';
 	import { Database as SQLiteDatabase, Statement as SQLiteStatement } from 'sqlite';
 	import { Database as SyncSQLiteDatabase, Statement as SyncSQLiteStatement } from 'SyncSqlite';
@@ -117,7 +117,14 @@ declare module 'discord.js-commando' {
 
 		public static usage(command: string, prefix?: string, user?: User): string;
 	}
-
+	export class Event {
+		public constructor(client: CommandoClient, event: EventInfo);
+		private static check(client: CommandoClient, event: EventInfo);
+		public readonly client: CommandoClient;
+		public name: string;
+		public enabled: boolean;
+		public run(client: CommandoClient, args: object): Promise<Message>
+	}
 	export class CommandDispatcher {
 		public constructor(client: CommandoClient, registry: CommandoRegistry);
 
@@ -233,6 +240,7 @@ declare module 'discord.js-commando' {
 		public options: CommandoClientOptions;
 		public readonly owners: User[];
 		public provider: SettingProvider;
+		public handleEvent: object;
 		public registry: CommandoRegistry;
 		public settings: GuildSettingsHelper;
 
@@ -339,7 +347,7 @@ declare module 'discord.js-commando' {
 		public registerDefaultCommands(commands?: { help?: boolean, prefix?: boolean, eval?: boolean, ping?: boolean, commandState?: boolean, unknownCommand?: boolean }): CommandoRegistry;
 		public registerDefaultGroups(): CommandoRegistry;
 		public registerDefaults(): CommandoRegistry;
-		public registerDefaultTypes(types?: { string?: boolean, integer?: boolean, float?: boolean, boolean?: boolean, user?: boolean, member?: boolean, role?: boolean, channel?: boolean, message?: boolean, command?: boolean, group?: boolean }): CommandoRegistry;
+		public registerDefaultTypes(types?: { string?: boolean, integer?: boolean, float?: boolean, boolean?: boolean, user?: boolean, member?: boolean, role?: boolean, channel?: boolean, message?: boolean, command?: boolean, group?: boolean, duration?: boolean }): CommandoRegistry;
 		public registerEvalObject(key: string, obj: {}): CommandoRegistry;
 		public registerEvalObjects(obj: {}): CommandoRegistry;
 		public registerGroup(group: CommandGroup | Function | { id: string, name?: string, guarded?: boolean } | string, name?: string, guarded?: boolean): CommandoRegistry;
@@ -497,13 +505,17 @@ declare module 'discord.js-commando' {
 		hidden?: boolean;
 		unknown?: boolean;
 	};
-
+	type EventInfo = {
+		name: string;
+		enabled?: boolean
+	}
 	type CommandoClientOptions = ClientOptions & {
 		commandPrefix?: string;
 		commandEditableDuration?: number;
 		nonCommandEditable?: boolean;
 		owner?: string | string[] | Set<string>;
 		invite?: string;
+		
 	};
 
 	type CommandResolvable = Command | string;

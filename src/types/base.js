@@ -65,3 +65,4 @@ class ArgumentType {
 }
 
 module.exports = ArgumentType;
+ 

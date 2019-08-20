@@ -117,7 +117,14 @@ declare module 'elaracmdo' {
 
 		public static usage(command: string, prefix?: string, user?: User): string;
 	}
-
+	export class Event {
+		public constructor(client: CommandoClient, event: EventInfo);
+		private static check(client: CommandoClient, event: EventInfo);
+		public readonly client: CommandoClient;
+		public name: string;
+		public enabled: boolean;
+		public run(client: CommandoClient, args: object): Promise<Message>
+	}
 	export class CommandDispatcher {
 		public constructor(client: CommandoClient, registry: CommandoRegistry);
 
@@ -233,6 +240,7 @@ declare module 'elaracmdo' {
 		public options: CommandoClientOptions;
 		public readonly owners: User[];
 		public provider: SettingProvider;
+		public handleEvent: object;
 		public registry: CommandoRegistry;
 		public settings: GuildSettingsHelper;
 
@@ -336,7 +344,7 @@ declare module 'elaracmdo' {
 		public registerCommand(command: Command | Function): CommandoRegistry;
 		public registerCommands(commands: Command[] | Function[], ignoreInvalid?: boolean): CommandoRegistry;
 		public registerCommandsIn(options: string | {}): CommandoRegistry;
-		public registerDefaultCommands(commands?: { help?: boolean, prefix?: boolean, eval?: boolean, ping?: boolean, commandState?: boolean, unknownCommand?: boolean, extra?: boolean }): CommandoRegistry;
+		public registerDefaultCommands(commands?: { help?: boolean, prefix?: boolean, eval?: boolean, ping?: boolean, commandState?: boolean, unknownCommand?: boolean }): CommandoRegistry;
 		public registerDefaultGroups(): CommandoRegistry;
 		public registerDefaults(): CommandoRegistry;
 		public registerDefaultTypes(types?: { string?: boolean, integer?: boolean, float?: boolean, boolean?: boolean, user?: boolean, member?: boolean, role?: boolean, channel?: boolean, message?: boolean, command?: boolean, group?: boolean }): CommandoRegistry;
@@ -497,13 +505,17 @@ declare module 'elaracmdo' {
 		hidden?: boolean;
 		unknown?: boolean;
 	};
-
+	type EventInfo = {
+		name: string;
+		enabled?: boolean
+	}
 	type CommandoClientOptions = ClientOptions & {
 		commandPrefix?: string;
 		commandEditableDuration?: number;
 		nonCommandEditable?: boolean;
 		owner?: string | string[] | Set<string>;
 		invite?: string;
+		
 	};
 
 	type CommandResolvable = Command | string;

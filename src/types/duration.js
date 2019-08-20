@@ -1,5 +1,5 @@
-const {ArgumentType} = require('elaracmdo')
-module.exports = class CurrencyType extends ArgumentType {
+const ArgumentType = require('./base');
+module.exports = class DurationType extends ArgumentType {
  
   constructor(client) {
     super(client, 'duration');

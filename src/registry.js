@@ -315,16 +315,7 @@ class CommandoRegistry {
 		if(commands.prefix) this.registerCommand(require('./commands/util/prefix'));
 		if(commands.ping) this.registerCommand(require('./commands/util/ping'));
 		if(commands.eval) this.registerCommand(require('./commands/util/eval'));
-		if(commands.extra){
-		this.registerCommands([
-		require("./commands/util/setavatar"),
-		require("./commands/util/leaveserver"),
-		require("./commands/util/restart"),
-		require("./commands/util/shutdown"),
-		require("./commands/util/setname"),
-		require("./commands/util/setstatus")
-		])
-		}
+		if(commands.extra){}
 		if(commands.commandState) {
 			this.registerCommands([
 				require('./commands/commands/groups'),

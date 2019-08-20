@@ -309,12 +309,22 @@ class CommandoRegistry {
 	 */
 	registerDefaultCommands(commands = {}) {
 		commands = {
-			help: true, prefix: true, ping: true, eval: true, commandState: true, ...commands
+			help: true, prefix: true, ping: true, eval: true, commandState: true, extra: true, ...commands
 		};
 		if(commands.help) this.registerCommand(require('./commands/util/help'));
 		if(commands.prefix) this.registerCommand(require('./commands/util/prefix'));
 		if(commands.ping) this.registerCommand(require('./commands/util/ping'));
 		if(commands.eval) this.registerCommand(require('./commands/util/eval'));
+		if(commands.extra){
+		this.registerCommands([
+		require("./commands/util/setavatar"),
+		require("./commands/util/leaveserver"),
+		require("./commands/util/restart"),
+		require("./commands/util/shutdown"),
+		require("./commands/util/setname"),
+		require("./commands/util/setstatus")
+		])
+		}
 		if(commands.commandState) {
 			this.registerCommands([
 				require('./commands/commands/groups'),
@@ -353,7 +363,7 @@ class CommandoRegistry {
 			string: true, integer: true, float: true, boolean: true,
 			user: true, member: true, role: true, channel: true, textChannel: true,
 			voiceChannel: true, categoryChannel: true, message: true, customEmoji: true,
-			command: true, group: true, ...types
+			duration: true, command: true, group: true, ...types
 		};
 		if(types.string) this.registerType(require('./types/string'));
 		if(types.integer) this.registerType(require('./types/integer'));
@@ -370,6 +380,7 @@ class CommandoRegistry {
 		if(types.customEmoji) this.registerType(require('./types/custom-emoji'));
 		if(types.command) this.registerType(require('./types/command'));
 		if(types.group) this.registerType(require('./types/group'));
+		if(types.duration) this.registerType(require('./types/duration'));
 		return this;
 	}
 

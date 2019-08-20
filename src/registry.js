@@ -360,7 +360,6 @@ class CommandoRegistry {
 	 * @param {boolean} [types.customEmoji=true] - Whether to register the built-in custom-emoji type
 	 * @param {boolean} [types.command=true] - Whether to register the built-in command type
 	 * @param {boolean} [types.group=true] - Whether to register the built-in group type
-	 * @param {boolean} [types.duration=true] - Whether to register the built-in duration type
 	 * @return {CommandoRegistry}
 	 */
 	registerDefaultTypes(types = {}) {

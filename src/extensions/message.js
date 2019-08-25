@@ -224,7 +224,7 @@ module.exports = Structures.extend('Message', Message => {
 					this.client.emit('commandCancel', this.command, collResult.cancelled, this, collResult);
 					let eeeeee = new MessageEmbed()
 					.setAuthor(this.client.user.tag, this.client.user.displayAvatarURL())
-					.setColor(`#FF0000`)
+					.setColor(this.client.util.colors.default)
 					.setTitle(`INFO`)
 					.setDescription(`Command Canceled`)
 					return this.embed(eeeeee);

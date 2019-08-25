@@ -3,7 +3,7 @@ const { escapeMarkdown, MessageEmbed } = require('discord.js');
 const { oneLine, stripIndents } = require('common-tags');
 const ArgumentCollector = require('./collector');
 const { permissions } = require('../util');
-
+const CommandCooldown = new Set()
 /** A command that can be run in a client */
 class Command {
 	/**
@@ -297,6 +297,9 @@ class Command {
 		.setColor(`#FF0000`)
 		.setTitle(`INFO`)
 		.setTimestamp()
+		if(CommandCooldown.has(message.author.id)) return null;
+		if(!CommandCooldown.has(message.author.id)) CommandCooldown.add(message.author.id)
+		setTimeout(() => {CommandCooldown.delete(message.author.id)}, 5000)
 		switch(reason) {
 			case 'guildOnly':
 				embed.setDescription(`${this.name}, can only be used in a server.`)

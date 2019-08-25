@@ -180,10 +180,10 @@ class Argument {
 			// Prompt the user for a new value
 			let er = new MessageEmbed()
 			.setAuthor(msg.client.user.tag, msg.client.user.displayAvatarURL())
-			.setColor(`#FF0000`)
+			.setColor(msg.client.util.colors.default)
 			.setTitle(`INFO`)
 			.setDescription(`${empty ? this.prompt : valid ? valid : `You provided an invalid ${this.label}. Please try again.`}`)
-			.addField(`\u200b`, `Respond with \`cancel\` to cancel the command!`)
+			.addField(`\u200b`, `Respond with \`cancel\` to cancel the command!\nDon't include the prefix and command name`)
 			.setFooter(`${wait ? `The command will automatically be canceled in ${this.wait} seconds` : ""}`)
 			prompts.push(await msg.channel.send(er));
 
@@ -266,23 +266,23 @@ class Argument {
 					const escaped = escapeMarkdown(val).replace(/@/g, '@\u200b');
 					let er = new MessageEmbed()
 					.setAuthor(msg.client.user.tag, msg.client.user.displayAvatarURL())
-					.setColor(`#FF0000`)
+					.setColor(msg.client.util.colors.default)
 					.setTitle(`INFO`)
 					.setDescription(`	${valid ? valid : oneLine`
 							You provided an invalid ${this.label},
 							"${escaped.length < 1850 ? escaped : '[too long to show]'}".
 							Please try again.
 						`}`)
-					.addField(`\u200b`, `Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.`)
+					.addField(`\u200b`, `Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.\nDon't include the prefix and command name`)
 					.setFooter(`${wait ? `The command will automatically be canceled in ${this.wait} seconds` : ""}`)
 					prompts.push(await msg.channel.send(er));
 				} else if(results.length === 0) {
 					let er = new MessageEmbed()
 					.setAuthor(msg.client.user.tag, msg.client.user.displayAvatarURL())
-					.setColor(`#FF0000`)
+					.setColor(msg.client.util.colors.default)
 					.setTitle(`INFO`)
 					.setDescription(`${this.prompt}`)
-					.addField(`\u200b`, `Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.`)
+					.addField(`\u200b`, `Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.\nDon't include the prefix and command name`)
 					.setFooter(`${wait ? `The command will automatically be canceled in ${this.wait} seconds` : ""}`)
 					prompts.push(await msg.channel.send(er));
 				}

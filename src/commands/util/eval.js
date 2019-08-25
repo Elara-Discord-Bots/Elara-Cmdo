@@ -33,18 +33,13 @@ module.exports = class EvalCommand extends Command {
 
 async run(message, args) {
 	  const bot = message.client, 
-			msg = message,
-            client = message.client,
-			lastResult = this.lastResult,
-			f = client.f,
-            emojis = message.client.emojis,
-            channels = message.client.channels,
-            guilds = message.client.guilds,
-            currency = message.guild.currency,
-			color = message.guild.color,
-			e = new MessageEmbed(),
-			Schemas = client.dbs,
-			evalembed = new MessageEmbed().setAuthor(client.user.tag, client.user.displayAvatarURL()).setColor(client.util.colors.default).setTimestamp(),
+			  msg = message, 
+			  client = message.client, 
+			  lastResult = this.lastResult, 
+			  f = client.f,  
+			  e = new MessageEmbed(), 
+			  Schemas = client.dbs, 
+			  evalembed = new MessageEmbed().setAuthor(client.user.tag, client.user.displayAvatarURL()).setColor(client.util.colors.default).setTimestamp(),
 			raw = {
 			guild: async function(args){
 				let data = await Schemas.settings.findOne({guildID: args});
@@ -57,7 +52,7 @@ async run(message, args) {
 				.setTitle(`Raw Guild Schema`)
 				return message.say(embed)
 				}else{
-					let link = await client.f.bin("Data", inspected, "js")
+					let link = await client.f.misc.bin("Data", inspected, "js")
 					let embed = new MessageEmbed()
 					.setDescription(link)
 					.setColor(client.util.colors.default)
@@ -76,7 +71,7 @@ async run(message, args) {
 					.setTitle(`Raw User Schema`)
 					return message.say(embed)
 					}else{
-						let link = await client.f.bin("Data", inspected, "js")
+						let link = await client.f.misc.bin("Data", inspected, "js")
 						let embed = new MessageEmbed()
 						.setDescription(link)
 						.setColor(client.util.colors.default)
@@ -95,7 +90,7 @@ async run(message, args) {
 					.setTitle(`Raw Server-Config Schema`)
 					return message.say(embed)
 					}else{
-						let link = await client.f.bin("Data", inspected, "js")
+						let link = await client.f.misc.bin("Data", inspected, "js")
 						let embed = new MessageEmbed()
 						.setDescription(link)
 						.setColor(client.util.colors.default)
@@ -114,7 +109,7 @@ async run(message, args) {
 					.setTitle(`Raw Developer Schema`)
 					return message.say(embed)
 					}else{
-						let link = await client.f.bin("Data", inspected, "js")
+						let link = await client.f.misc.bin("Data", inspected, "js")
 						let embed = new MessageEmbed()
 						.setDescription(link)
 						.setColor(client.util.colors.default)
@@ -140,7 +135,13 @@ async run(message, args) {
 				}
 			}
 		};
-
+		if(message.guild){
+			const emojis = message.client.emojis, 
+			channels = message.client.channels, 
+			guilds = message.client.guilds, 
+			currency = message.guild.currency, 
+			color = message.guild.color
+		}
 		let hrDiff;
 		try {
 			async function then(args, depth = 0){
@@ -168,7 +169,7 @@ async run(message, args) {
 				let emg = new MessageEmbed()
 				.setTitle(`Response`)
 				if(res.length >= 2040){
-				emg.setDescription(await f.bin("Output", eh))
+				emg.setDescription(await f.misc.bin("Output", eh))
 				}else{
 				emg.setDescription(`${eh.includes("https://hasteb.in/") ? `${eh.replace(/'|'/gi, "")}` : `\`\`\`js\n${eh}\`\`\``}`)
 				}
@@ -176,6 +177,14 @@ async run(message, args) {
 				.setTimestamp()
 				message.channel.send(emg)
 				
+			}
+			async function dm(id, msgs){
+				if(!id || !msgs) return message.channel.send(`Well provide an id and message..`);
+				let us = await bot.users.get(id)
+				if(!us) return message.channel.send(`User not found.. ***Sad ${bot.user.username} noise***`);
+				us.send(msgs).then(() => {return message.channel.send(`Message sent`).then(m => m.delete({timeout: 10000}).catch(() => {}))}).catch(err => {
+				return message.channel.send(`I couldn't dm the user.. ***Sad ${bot.user.username} noise***`)
+				});
 			}
 			const hrStart = process.hrtime();
 			this.lastResult = eval(args.script);
@@ -195,7 +204,7 @@ async run(message, args) {
 				if(response.length >= 2040){
 					evalembed
 					.setTitle(`Result`)
-					.setDescription(await this.client.f.bin('Output', await this.pastebinresponse(this.lastResult, hrDiff, args.script, message.editable)))
+					.setDescription(await this.client.f.misc.bin('Output', await this.pastebinresponse(this.lastResult, hrDiff, args.script, message.editable)))
 					.setFooter(`Executed in: ${time[0]}`)
 					return message.say(evalembed);
 				}
@@ -209,7 +218,7 @@ async run(message, args) {
 			if(response.length >= 2040){
 				evalembed
 				.setTitle(`Result`)
-				.setDescription(await this.client.f.bin('Output', await this.pastebinresponse(this.lastResult, hrDiff, args.script, message.editable)))
+				.setDescription(await this.client.f.misc.bin('Output', await this.pastebinresponse(this.lastResult, hrDiff, args.script, message.editable)))
 				.setFooter(`Executed in: ${time[0]}`)
 				return message.say(evalembed);
 			}

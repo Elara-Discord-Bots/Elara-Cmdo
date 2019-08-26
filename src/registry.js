@@ -317,12 +317,6 @@ class CommandoRegistry {
 		if(commands.eval) this.registerCommand(require('./commands/util/eval'));
 		if(commands.extra){
 		this.registerCommands([
-		require("./commands/util/setavatar"),
-		require("./commands/util/leaveserver"),
-		require("./commands/util/restart"),
-		require("./commands/util/shutdown"),
-		require("./commands/util/setname"),
-		require("./commands/util/setstatus"),
 		require("./commands/util/support"),
 		require("./commands/util/uptime"),
 		require("./commands/util/invite"),
@@ -333,10 +327,7 @@ class CommandoRegistry {
 			this.registerCommands([
 				require('./commands/commands/groups'),
 				require('./commands/commands/enable'),
-				require('./commands/commands/disable'),
-				require('./commands/commands/reload'),
-				require('./commands/commands/load'),
-				require('./commands/commands/unload')
+				require('./commands/commands/disable')
 			]);
 		}
 		return this;

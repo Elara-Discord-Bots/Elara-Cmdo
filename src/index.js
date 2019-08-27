@@ -20,6 +20,7 @@ module.exports = {
 	Haste: require("./extensions/Hastebin"),
 	Paladins: require("./extensions/Paladins"),
 	Morse: require("./extensions/Morse"),
+	Numbers: require("./extensions/numbers"),
 	Gar: require("./extensions/Gar"),
 	randomPuppy: require("./extensions/randompuppy"),
 	YT: require("./extensions/ytsearch"),

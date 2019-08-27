@@ -18,6 +18,7 @@ module.exports = {
 	Docs: require("./extensions/Docs"),
 	Event: require("./extensions/Event"),
 	CPU: require("./extensions/cpu-stats"),
+	Numbers: require("./extensions/numbers"),
 	Haste: require("./extensions/Hastebin"),
 	Paladins: require("./extensions/Paladins"),
 	Morse: require("./extensions/Morse"),

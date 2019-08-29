@@ -16,9 +16,9 @@ module.exports = class EnableCommandCommand extends Command {
 			examples: ['enable util', 'enable Utility', 'enable prefix'],
 			guarded: true,
 			throttling: {
-                            usages: 2,
-                	    duration: 20
-            		},
+                usages: 2,
+            	duration: 20
+            },
 			args: [
 				{
 					key: 'cmdOrGrp',
@@ -36,16 +36,8 @@ module.exports = class EnableCommandCommand extends Command {
 	}
 
 	run(msg, args) {
-		const group = args.cmdOrGrp.group;
-		if(args.cmdOrGrp.isEnabledIn(msg.guild, true)) {
-			return msg.reply(
-				`The \`${args.cmdOrGrp.name}\` ${args.cmdOrGrp.group ? 'command' : 'group'} is already enabled${
-					group && !group.isEnabledIn(msg.guild) ?
-					`, but the \`${group.name}\` group is disabled, so it still can't be used` :
-					''
-				}.`
-			);
-		}
+		function thismsg(message, type){return {title: `${type}`, color: 0x36393E, author: {name: message.guild.name, icon_url: message.guild.iconURL()}}}
+		if(args.cmdOrGrp.isEnabledIn(msg.guild, true)) return msg.channel.send({embed: thismsg(msg, `${args.cmdOrGrp.group ? "Command" : "Group"} (${args.cmdOrGrp.name}) is already enabled!`)})
 		args.cmdOrGrp.setEnabledIn(msg.guild, true);
 		this.client.dbs.settings.findOne({guildID: msg.guild.id}, async (err, db) => {
 			if(db){
@@ -55,12 +47,6 @@ module.exports = class EnableCommandCommand extends Command {
 				}
 			}
 		})
-		return msg.reply(
-			`Enabled the \`${args.cmdOrGrp.name}\` ${group ? 'command' : 'group'}${
-				group && !group.isEnabledIn(msg.guild) ?
-				`, but the \`${group.name}\` group is disabled, so it still can't be used` :
-				''
-			}.`
-		);
+		return msg.channel.send({embed: thismsg(msg, `${args.cmdOrGrp.group ? "Command" : "Group"} (${args.cmdOrGrp.name}) has been enabled!`)})
 	}
 };

@@ -15,7 +15,10 @@ module.exports = class EnableCommandCommand extends Command {
 			`,
 			examples: ['enable util', 'enable Utility', 'enable prefix'],
 			guarded: true,
-
+			throttling: {
+                            usages: 2,
+                	    duration: 20
+            		},
 			args: [
 				{
 					key: 'cmdOrGrp',
@@ -44,6 +47,14 @@ module.exports = class EnableCommandCommand extends Command {
 			);
 		}
 		args.cmdOrGrp.setEnabledIn(msg.guild, true);
+		this.client.dbs.settings.findOne({guildID: msg.guild.id}, async (err, db) => {
+			if(db){
+				if(db.misc.commands.includes(args.cmdOrGrp.name)){
+				db.misc.commands = db.misc.commands.filter(c => c !== args.cmdOrGrp.name);
+				db.save().catch(() => {})
+				}
+			}
+		})
 		return msg.reply(
 			`Enabled the \`${args.cmdOrGrp.name}\` ${group ? 'command' : 'group'}${
 				group && !group.isEnabledIn(msg.guild) ?

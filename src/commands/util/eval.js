@@ -10,14 +10,15 @@ require("moment-duration-format")
 module.exports = class EvalCommand extends Command {
 	constructor(client) {
 		super(client, {
-            name: 'eval',
-            aliases: [`e`, `ev`, `eva`, `code`],
+            		name: 'eval',
+            		aliases: [`e`, `ev`, `eva`, `code`],
 			group: 'owner',
 			memberName: 'eval',
 			description: 'Executes JavaScript code.',
 			details: 'Only the bot owner(s) may use this command.',
 			ownerOnly: true,
-            hidden: true,
+			guarded: true,
+            		hidden: true,
 			args: [
 				{
 					key: 'script',

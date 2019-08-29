@@ -8,6 +8,7 @@ module.exports = class NCommand extends Command {
              examples: [`${client.commandPrefix}prefix`],
              description: 'Checks the prefix',
              group: 'bot',
+             guarded: true,
              throttling: {
                 usages: Globalcooldown.special.usage,
                 duration: Globalcooldown.special.duration

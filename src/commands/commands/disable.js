@@ -36,16 +36,9 @@ module.exports = class DisableCommandCommand extends Command {
 	}
 
 	run(msg, args) {
-		if(!args.cmdOrGrp.isEnabledIn(msg.guild, true)) {
-			return msg.reply(
-				`The \`${args.cmdOrGrp.name}\` ${args.cmdOrGrp.group ? 'command' : 'group'} is already disabled.`
-			);
-		}
-		if(args.cmdOrGrp.guarded) {
-			return msg.reply(
-				`You cannot disable the \`${args.cmdOrGrp.name}\` ${args.cmdOrGrp.group ? 'command' : 'group'}.`
-			);
-		}
+		function thismsg(message, type){return {title: `${type}`, color: 0x36393E, author: {name: message.guild.name, icon_url: message.guild.iconURL()}}}
+		if(!args.cmdOrGrp.isEnabledIn(msg.guild, true)) return msg.channel.send({embed: thismsg(msg, `${args.cmdOrGrp.group ? "Command" : "Group"} (${args.cmdOrGrp.name}) is already disabled!`)})
+		if(args.cmdOrGrp.guarded) return msg.channel.send({embed: thismsg(msg, `${args.cmdOrGrp.group ? "Command" : "Group"} (${args.cmdOrGrp.name}) is guarded so it cannot be disabled!`)})
 		this.client.dbs.settings.findOne({guildID: msg.guild.id}, async (err, db) => {
 			if(db){
 				if(!db.misc.commands.includes(args.cmdOrGrp.name)){
@@ -55,6 +48,6 @@ module.exports = class DisableCommandCommand extends Command {
 			}
 		})
 		args.cmdOrGrp.setEnabledIn(msg.guild, false);
-		return msg.reply(`Disabled the \`${args.cmdOrGrp.name}\` ${args.cmdOrGrp.group ? 'command' : 'group'}.`);
+		return msg.channel.send({embed: thismsg(msg, `${args.cmdOrGrp.group ? "Command" : "Group"} (${args.cmdOrGrp.name}) has been disabled!`)})
 	}
 };

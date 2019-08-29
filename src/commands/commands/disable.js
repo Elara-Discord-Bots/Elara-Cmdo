@@ -48,8 +48,8 @@ module.exports = class DisableCommandCommand extends Command {
 		}
 		this.client.dbs.settings.findOne({guildID: msg.guild.id}, async (err, db) => {
 			if(db){
-				if(!db.misc.commands.includes(cmdOrGrp.name)){
-				db.misc.commands.push(cmdOrGrp.name);
+				if(!db.misc.commands.includes(args.cmdOrGrp.name)){
+				db.misc.commands.push(args.cmdOrGrp.name);
 				db.save().catch(() => {})
 				}
 			}

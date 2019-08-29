@@ -294,7 +294,7 @@ class Command {
 	onBlock(message, reason, data) {
 		let embed = new MessageEmbed()
 		.setAuthor(message.client.user.tag, message.client.user.displayAvatarURL())
-		.setColor(`#FF0000`)
+		.setColor(message.guild ? message.guild.color: message.client.util.colors.default)
 		.setTitle(`INFO`)
 		.setTimestamp()
 		if(CommandCooldown.has(message.author.id)) return null;
@@ -338,7 +338,7 @@ class Command {
 				return message.client.f.cmdschannel(message);
 			}
 			case "GlobalDisable": {
-				return message.channel.send(embed.setTitle(`Command (\`${this.name}\`) has been globally disabled by the bot dev(s)`))
+				return message.channel.send(embed.setTitle(`Command (\`${this.name}\`) is disabled by the bot developers`))
 			}
 			default:
 				return null;

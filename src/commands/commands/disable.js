@@ -15,7 +15,10 @@ module.exports = class DisableCommandCommand extends Command {
 			`,
 			examples: ['disable util', 'disable Utility', 'disable prefix'],
 			guarded: true,
-
+			throttling: {
+                	usages: 2,
+                	duration: 20
+            		},
 			args: [
 				{
 					key: 'cmdOrGrp',
@@ -43,6 +46,14 @@ module.exports = class DisableCommandCommand extends Command {
 				`You cannot disable the \`${args.cmdOrGrp.name}\` ${args.cmdOrGrp.group ? 'command' : 'group'}.`
 			);
 		}
+		this.client.dbs.settings.findOne({guildID: msg.guild.id}, async (err, db) => {
+			if(db){
+				if(!db.misc.commands.includes(cmdOrGrp.name)){
+				db.misc.commands.push(cmdOrGrp.name);
+				db.save().catch(() => {})
+				}
+			}
+		})
 		args.cmdOrGrp.setEnabledIn(msg.guild, false);
 		return msg.reply(`Disabled the \`${args.cmdOrGrp.name}\` ${args.cmdOrGrp.group ? 'command' : 'group'}.`);
 	}

@@ -130,7 +130,7 @@ class CommandDispatcher {
 					if(!cmdMsg.command.isEnabledIn(message.guild)) {
 						if(!cmdMsg.command.unknown) {
 							let embed = {title: `Command (${cmdMsg.command.name}) is disabled!`, color: 0x36393E, author: {name: message.guild.name, icon_url: message.guild.iconURL()}}
-							responses = await cmdMsg.channel.send({embed: embed});
+							responses = await cmdMsg.channel.send({embed: embed}).then(msg => {setTimeout(() => {msg.delete().catch(() => {}); cmdMsg.delete().catch(() => {})}, 10000)});
 						} else {
 							/**
 							 * Emitted when an unknown command is triggered

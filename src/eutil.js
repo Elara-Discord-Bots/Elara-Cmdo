@@ -26,145 +26,6 @@ const dcolors = {
     "asciidoc": "```asciidoc\n= Blue =\n[Orange]```\n**Source:**\n\\`\\`\\`asciidoc\n= Blue =\n[Orange]\\`\\`\\`"
 
 },
-      list1 = [
-    "SUPERCHIEFYT's Discord [Click Here](https://discord.gg/NGdVDgk)",
-    "Lackacord: [Click Here](https://discord.gg/lackadaisy)",
-    "Kappa [Click Here](https://discord.gg/6bhZqZx)",
-    "AdmiralBahroo (Nitro) [Click Here](https://discord.gg/cBnqxyG)",
-    "LoL Animated Emotes [Click Here](https://discord.gg/ZK8wxQG)",
-    "Word Art Animated Emotes [Click Here](https://discord.gg/sAMRy5R)",
-    "Skype Emoticons [Click Here](https://discord.gg/CRjxaGN)",
-    "Parrot [Click Here](https://discord.gg/qTfQP6Y)",
-    "Link Emojis 1 & 2 [Click Here](https://discord.gg/SUXymVk) [Click Here](https://discord.gg/ubCMzeh)",
-    "Yahoo! Messenger Emoticons [Click Here](https://discord.gg/7hfQhZD)",
-    "iOS Emojis [Click Here](https://discord.me/ios)",
-    "Nitro Dragon 1-3 [Click Here](https://discord.gg/h2ySHh6) [Click Here](https://discord.gg/A36HAJk) [Click Here](https://discord.gg/W2kn7Gg)",
-    "Nitro Turtle Emotes [Click Here](https://discord.gg/KPAbMYR)",
-    "Feenix Gun Warehouse [Click Here](https://discord.gg/r9RWNfg)",
-    "Bears Of The Polar Variety [Nitro] [Click Here](https://discord.gg/QS8CGp5)",
-],
-      list2 = [
-    "OWL Emote Server [Click Here](https://discord.gg/JA2UfZz)",
-    "Shinobu's Fanclub [Click Here](https://discord.gg/UdntTu)",
-    "Kakegurui Emotes [Click Here](https://discord.gg/Ttk7ryS)",
-    "The Super Mario Bros. Super Discord! [Click Here](https://discord.gg/nKn4bht)",
-    "Kanna Land [Click Here](https://discord.gg/UksqYSJ)",
-    "Nitro Marvel Emotes 1-3 [Click Here](https://discord.gg/wpFbuE9) [Click Here](https://discord.gg/cBbyQRs) [Click Here](https://discord.gg/qg3JxhR)",
-    "Om Nom Emojis [Click Here](https://discord.gg/czkntHn)",
-    "Kanna City [Click Here](https://discord.gg/SgtXteM)",
-    "The Brass Knights [Click Here](https://discord.gg/P3PdnyP)",
-    "Gilby's Orange Emoji Server [Click Here](https://discord.gg/uzzfURr)",
-    "Club Penguin Emotes (Nitro) [Click Here](https://discord.gg/b3yXvTn)",
-    "Spongemoji [Click Here](https://discord.gg/wTpEZSW)",
-    "Pepo Emoji Server [Click Here](https://discord.gg/zSvH8MJ)",
-    "NITRO [Click Here](https://discord.gg/wjfGmG3)",
-    "Squid Girl Emotes [Click Here](https://discord.gg/aAJ7bRn)",
-],
-      list3 = [
-    "Nitro Reach Blobs [Click Here](https://discord.gg/hhwZWNw)",
-    "Nitro Pusheen Blobs [Click Here](https://discord.gg/ys8FKMj)",
-    "Nitro Roo Blobs [Click Here](https://discord.gg/nBXNqzZ)",
-    "Nitro Monkey Blobs [Click Here](https://discord.gg/pR2fUTs)",
-    "Nitro Blob Bears [Click Here](https://discord.gg/4USaSzA)",
-    "Nitro Blob Hub [Click Here](https://discord.gg/yATKMY8)",
-    "Pig Blobs [Click Here](https://discord.gg/KaqCjhq)",
-    "Tiger Blobs [Click Here](https://discord.gg/p7cybSH)",
-    "Blobsciles 1-2 [Click Here](https://discord.gg/EtDfXgR) [Click Here](https://discord.gg/HPvRrue)",
-    "Peanuts Blobs [Click Here](https://discord.gg/uGhYzGe)",
-    "Badtz-Maru Blobs [Click Here](https://discord.gg/bPmpk3u)",
-    "Pekkle Blobs [Click Here](https://discord.gg/YtKKyhz)",
-    "Hello Kitty Blobs [Click Here](https://discord.gg/PNXMpj3)",
-    "Dom's Mono Blobs [Click Here](https://discord.gg/RjcJhkT)",
-    "Satania Emotes [Nitro] [Click Here](https://discord.gg/dJP2a6B)",
-],
-      list4 = [
-    "Mafu & Sora Dungeon [Click Here](https://discord.gg/DcPqhVe)",
-    "Block Emotes (NITRO) [Click Here](https://discord.gg/MupeCRX)",
-    "menhera-chan emotes [Click Here](https://discord.gg/2JpaKFQ)",
-    "Koroji [Click Here](https://discord.gg/KnXbnh7)",
-    "Kingdom of derpy cats [Click Here](https://discord.gg/4katZY4)",
-    "OK_HAND [Click Here](https://discord.gg/MAxArQe)",
-    "Lost In Potato [Click Here](https://discord.gg/mpBT24E)",
-    "Hamtaro & Bijou [Click Here](https://discord.gg/BxEcTQg)",
-    "Google Hearts 🧡 [Click Here](https://discord.gg/fES8MnV)",
-    "Futurama Emotes [Click Here](https://discord.gg/7uJHEcJ)",
-    "Splatoon Blobs Collection [Click Here](https://discord.gg/KwekejQ)",
-    "Pokemon Emotes [Click Here](https://discord.gg/G7zkRAv)",
-    "SnooEmotes [Click Here](https://discord.gg/4nVjmxW)",
-    "Pepo Nitro Only [Click Here](https://discord.gg/NEVk3gF)",
-    "Neon Blob Collection [Click Here](https://discord.gg/syVKsvj)",
-],
-      list5 = [
-    "birb [Click Here](https://discord.gg/gZqg8rW)",
-    "Winnie The Pooh's Empire [Click Here](https://discord.gg/3eVzRMp)",
-    "Ariana’s Nitro Lounge [Click Here](https://discord.gg/uCrq56T)",
-    "Timo's aniblobs [Click Here](https://discord.gg/EumAgH9)",
-    "Meowmoji [Click Here](https://discord.gg/jvzRCSD)",
-    "Peepo-Nitro Only [Click Here](https://discord.gg/vDXnrc3)",
-    "Anime 1 (Nitro) [Click Here](https://discord.gg/ru94Zf9)",
-    "Hands [Click Here](https://discord.gg/tanuvWj)",
-    "Nitro: Discord UI [Click Here](https://discord.gg/EK3nZhC)",
-    "Cat emote server [Click Here](https://discord.gg/pdkaJaH)",
-    "TurtleLuv-Emotes [Click Here](https://discord.gg/GxSKUXU)",
-    "Gilby's Blue Emoji Server [Click Here](https://discord.gg/GmwG3Vz)",
-    "Elias Emojis Squad [Click Here](https://discord.gg/mD5nwAc)",
-    "Eyes [Click Here](https://discord.gg/VxmuJAH)",
-],
-      list6 = [
-    "Party Parrot [Click Here](https://discord.gg/j2uKrjk)",
-    "Pusheen [Click Here](https://discord.gg/JQXFYmv)",
-    "Picard [Click Here](https://discord.gg/8arB6Av)",
-    "Intense Cat Gif [Click Here](https://discord.gg/Jwcwzq6)",
-    "Messenger Emoji [Click Here](https://discord.gg/rS8jkRY)",
-    "Dancing Letters - Red [Click Here](https://discord.gg/tcCQpwU)",
-    "Pepsimon [Click Here](https://discord.gg/fgCexSU)",
-    "Test Emoji Server [Click Here](https://discord.gg/aphe2JS)",
-    "Party Emotes [Click Here](https://discord.gg/y2aupZD)",
-    "Blobs [Click Here](https://discord.gg/2aRyMR6)",
-    "padoru [Click Here](https://discord.gg/BUVYhP3)",
-    "Discord ASDAS [Click Here](http://discord.gg/nFYuBSG)",
-    "B l u e 💙 [Click Here](https://discord.gg/ymXB3CW)",
-    "emptixo's server (nitro emojis) [Click Here](https://discord.gg/JUcqmfP)",
-    "Franxx Emote Server [Click Here](https://discord.gg/YUcJ6sy)",
-],
-      list7 = [
-    "Dancing Letters - Rainbow [Click Here](https://discord.gg/eCmuz4Z)",
-    "yookneecorn emotes [Click Here](https://discord.gg/kdDYVvG)",
-    "Better Blob Cat 1 [Click Here](https://discord.gg/Ak36gX4)",
-    "Better Blob Cat 2 [Click Here](https://discord.gg/9GVHcaV)",
-    "Blob Emoji [Click Here](https://discord.gg/2GMVNzQ)",
-    "Melancholy [Click Here](https://discord.gg/EXV2SKC)",
-    "Blobs With Googly Eyes [Click Here](https://discord.gg/qfQr2Aj)",
-    "Nitro Keycap Blobs [Click Here](https://discord.gg/EVafubh)",
-],
-      list8 = [
-    "Discord Staff Blobs [Click Here](https://discord.gg/PQW85fX)",
-    "Twitch Emotes 1-4 [Click Here](https://discord.gg/KNMMS2p) [Click Here](https://discord.gg/PDwFP4V) [Click Here](https://discord.gg/8745TRg) [Click Here](https://discord.gg/pf8wmvw)",
-    "Twitch Turbo Emotes 1-2  [Click Here](https://discord.gg/4GGWawS) [Click Here](https://discord.gg/pK5Ta6v)",
-    "Twitch Robot Emotes [Click Here](https://discord.gg/DA46d2j)",
-    "Discord Emoji & Servers [Click Here](https://discord.gg/2qyyFZM)",
-    "Neon Nitro Blobs 1-3 [Click Here](https://discord.gg/syVKsvj) [Click Here](https://discord.gg/mqeXUAX) [Click Here](https://discord.gg/z696gQN)",
-    "Global Emoji Hunters [Click Here](https://discord.gg/GYBtYeg)",
-],
-      list9 = [
-    `Slippy's Deam Worlds
-    1. [Invite](https://discord.gg/sa5kSUy)
-    2. [Invite](https://discord.gg/mKTjYw2)
-    3. [Invite](https://discord.gg/5CgvPWa)
-    4. [Invite](https://discord.gg/DGQw8RR)
-    5. [Invite](https://discord.gg/cC5VD6d)
-    6. [Invite](https://discord.gg/M9KXWQs)
-    7. [Invite](https://discord.gg/5r23Ke9)
-    8. [Invite](https://discord.gg/XDuqcJd)
-    9. [Invite](https://discord.gg/Z2wzxUk)
-    10. [Invite](https://discord.gg/TbhqAxv)
-    11. [Invite](https://discord.gg/Da8vPVX)
-    12. [Invite](https://discord.gg/SdmBPNB)
-    13. [Invite](https://discord.gg/H5JXgSS)
-    14. [Invite](https://discord.gg/KwgX2QG)
-    15. [Invite](https://discord.gg/NKexPRD)
-    `
-],
       fortunes = [
     " There is a true and sincere friendship between you and your friends.",
     " You find beauty in ordinary things, do not lose this ability.",
@@ -250,7 +111,8 @@ const dcolors = {
     "online": "<a:online:506430888670920704>",
     "idle": "<a:Idle:506430934359343104>",
     "dnd": "<a:dnd:506430977065877505>",
-    "offline": "<a:offline:506431026604539904>"
+    "offline": "<a:offline:506431026604539904>",
+    "invisible": "<a:offline:506431026604539904>"
 },
       colors = {
     "red": "#FF0000",
@@ -389,6 +251,5 @@ const dcolors = {
     };
 //End of Random Utility stuff
 module.exports = {
-    colors,emojis,status,dcolors,region,verifLevels,fortunes, jobs,
-    list1, list2, list3, list4, list5, list6, list7, list8, list9, throws, perms, permbits
+    colors,emojis,status,dcolors,region,verifLevels,fortunes, jobs,throws, perms, permbits
 }

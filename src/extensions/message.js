@@ -143,10 +143,6 @@ module.exports = Structures.extend('Message', Message => {
 				this.client.emit('commandBlock', this, "maintenance");
 				return this.command.onBlock(this, "maintenance")
 			};
-			if(await this.client.f.channel(this.client, this) === true && !this.client.isOwner(this.author)){
-				this.client.emit("commandBlock", this, "channel");
-				return this.command.onBlock(this, "channel");
-			}
 			if(this.command.guildOnly && !this.guild) {
 				/**
 				 * Emitted when a command is prevented from running

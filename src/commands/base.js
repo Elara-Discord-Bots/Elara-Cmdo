@@ -334,9 +334,6 @@ class Command {
 			case "maintenance":{
 				return message.client.f.msg(message);
 			};
-			case "channel": {
-				return message.client.f.cmdschannel(message);
-			}
 			case "GlobalDisable": {
 				return message.channel.send(embed.setTitle(`Command (\`${this.name}\`) is disabled by the bot developers`))
 			}

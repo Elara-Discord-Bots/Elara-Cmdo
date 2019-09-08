@@ -4,6 +4,24 @@ const Command = require('../commands/base');
 const FriendlyError = require('../errors/friendly');
 const CommandFormatError = require('../errors/command-format');
 
+const functions = {
+	blacklist: async (client, message) => {
+            if(message.guild){
+            if(client.config.ignore.guilds.includes(message.guild.id)) return true
+            };
+            if(client.GlobalUsers.includes(message.author.id)) return true
+            else return false;
+        
+        },
+	channel: async (client, message) => {
+            if(message.channel.type === "dm") return false
+            let db = await client.dbs.settings.findOne({guildID: message.guild.id}, async (err, db) => {db});
+            if(!db) return false;
+            if(db.channels.commands === "") return false
+            if(db.channels.commands !== message.channel.id && !message.member.hasPermission("MANAGE_MESSAGES") && !client.isOwner(message.author.id)) return true
+        }
+}
+
 module.exports = Structures.extend('Message', Message => {
 	/**
 	 * An extension of the base Discord.js Message class to add command-related functionality.
@@ -135,7 +153,7 @@ module.exports = Structures.extend('Message', Message => {
 				return this.command.onBlock(this, "GlobalDisable")
 			}
 			// Make sure the command is usable in this context
-			if(await this.client.f.blacklist(this.client, this) === true){
+			if(await functions.blacklist(this.client, this) === true){
 				this.client.emit('commandBlock', this, "blacklist");
 				return this.command.onBlock(this, "blacklist")
 			};
@@ -143,7 +161,7 @@ module.exports = Structures.extend('Message', Message => {
 				this.client.emit('commandBlock', this, "maintenance");
 				return this.command.onBlock(this, "maintenance")
 			};
-			if(await this.client.f.channel(this.client, this) === true && !this.client.isOwner(this.author)){
+			if(await functions.channel(this.client, this) === true && !this.client.isOwner(this.author)){
 				this.client.emit("commandBlock", this, "channel");
 				return this.command.onBlock(this, "channel");
 			}

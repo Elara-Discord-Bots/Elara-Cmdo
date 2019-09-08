@@ -4,6 +4,47 @@ const { oneLine, stripIndents } = require('common-tags');
 const ArgumentCollector = require('./collector');
 const { permissions } = require('../util');
 const CommandCooldown = new Set()
+const functions = {
+	msg: (msg) => {
+            if(cooldowns.maintenance.data.has(msg.author.id)) return null;
+            if(!cooldowns.maintenance.data.has(msg.author.id)) cooldowns.maintenance.data.add(msg.author.id)
+            setTimeout(() => {cooldowns.maintenance.data.delete(msg.author.id)}, cooldowns.maintenance.time)
+            let e = new MessageEmbed()
+            .setAuthor(msg.client.user.tag, msg.client.user.displayAvatarURL())
+            .setTitle(`Maintenance Mode`)
+            .addField(`Support Server`, msg.client.options.invite, true)
+            .setColor("PURPLE")
+            .setTimestamp()
+	    .setFooter(`This message will delete in 15 seconds`)
+            return msg.channel.send(e).then(m => m.delete({timeout: 15000}).catch(o => {}))
+        },
+	cmdschannel: async (message) => {
+            if(cooldowns.commands.data.has(message.author.id)) return null;
+            if(!cooldowns.commands.data.has(message.author.id)) cooldowns.commands.data.add(message.author.id)
+            setTimeout(() => {cooldowns.commands.data.delete(message.author.id)}, cooldowns.commands.time)
+            if(message.deleted == false){
+            message.delete({timeout: 100}).catch(o => {});
+            }
+            let db = await message.guild.me.client.dbs.settings.findOne({guildID: message.guild.id});
+            let e = new MessageEmbed()
+            .setAuthor(message.author.tag, message.author.displayAvatarURL())
+            .setDescription(`You can't do commands in this channel! Go to <#${db.channels.commands}>!`)
+            .setTitle(`INFO`)
+            .setColor(`#FF0000`)
+            .setFooter(`This message will delete in 15 seconds`)
+            return message.channel.send(message.author, {embed: e}).then(m => m.delete({timeout: 15000}).catch(o => {}))
+        }
+}
+const cooldowns = {
+    commands: {
+        data: new Set(),
+        time: 5000
+    },
+    maintenance: {
+        data: new Set(),
+        time: 10000
+    }
+}
 /** A command that can be run in a client */
 class Command {
 	/**
@@ -332,10 +373,10 @@ class Command {
 				return null;
 			};
 			case "maintenance":{
-				return message.client.f.msg(message);
+				return functions.msg(message);
 			};
 			case "channel": {
-				return message.client.f.cmdschannel(message);
+				return functions.cmdschannel(message);
 			}
 			case "GlobalDisable": {
 				return message.channel.send(embed.setTitle(`Command (\`${this.name}\`) is disabled by the bot developers`))

@@ -10,6 +10,7 @@ module.exports = {
 	Argument: require('./commands/argument'),
 	ArgumentType: require('./types/base'),
 	FriendlyError: require('./errors/friendly'),
+	WebhookSerices: require("./extensions/Services/Webhooks/webhook"),
 	CommandFormatError: require('./errors/command-format'),
 	RichDisplay: require('./commands/React/RichDisplay'),
 	RichMenu: require('./commands/React/RichMenu'),

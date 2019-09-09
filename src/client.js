@@ -2,7 +2,53 @@ const discord = require('discord.js');
 const CommandoRegistry = require('./registry');
 const CommandDispatcher = require('./dispatcher');
 const GuildSettingsHelper = require('./providers/helper');
-
+const eutil = require("./eutil");
+/**
+ * @typedef {Colors} Colors
+ * @property {string} [red] - The red hex color
+ * @property {string} [cyan] - The cyan hex color
+ * @property {string} [default] - The default hex color
+ * @property {string} [yellow] - The yellow hex color 
+ * @property {string} [green] - The green hex color
+ * @property {string} [orange] - The orange hex color.
+ */
+/**
+ * @typedef {Statuses} Statuses
+ * @property {string} [online] - The online emoji
+ * @property {string} [idle] - The idle emoji
+ * @property {string} [dnd] - The dnd emoji
+ * @property {string} [offline] - The offline emoji 
+ * @property {string} [invisible] - The offline emoji
+ */
+/**
+ * @typedef {Emojis} Emojis
+ * @property {string} [sreact] - The success emoji id
+ * @property {string} [nreact] - The 'xx' emoji id
+ * @property {string} [rload] - The loading emoji id
+ * @property {string} [rplan] - The planned emoji id
+ * @property {string} [semoji] - The success emoji
+ * @property {string} [eplan] - The planned emoji
+ * @property {string} [nemoji] - The 'xx' emoji
+ * @property {string} [eload] - The loading emoji
+ * @property {string} [robot] - The robot emoji
+ * @property {string} [eminus] - The minus emoji
+ * @property {string} [rminus] - The minus emoji id
+ * @property {string} [eplus] - The plus emoji
+ * @property {string} [rplus] - The plus emoji id
+ */
+/**
+ * @typedef {ElaraUtil} ElaraUtil
+ * @param {Colors} [colors] - The util colors
+ * @property {string[]} [fortunes] - The list of fortunes
+ * @property {string[]} [verifLevels] - The Verification levels.. array 
+ * @property {object} [dcolors] - The objects of the Discord 'colors' 
+ * @property {string[]} [throws] - The list of the default throws
+ * @property {string[]} [jobs] - The list of the default jobs
+ * @param {Emojis} [emojis] - The object of emojis
+ * @param {Statuses} [status] - The object of statuses
+ * @property {object} [perms] - The object of the permissions
+ * @property {object} [permbits] - The bit permissions object
+ */
 /**
  * Discord.js Client with a command framework
  * @extends {Client}
@@ -39,7 +85,26 @@ class CommandoClient extends discord.Client {
 		 * @type {CommandDispatcher}
 		 */
 		this.dispatcher = new CommandDispatcher(this, this.registry);
-
+		/**
+		* The utility for the bot
+		* @type {ElaraUtil}
+		*/
+		this.util = eutil;
+		/**
+		* To get the prefix of the guild/client provided
+		* @type {function}
+		*/
+		this.getPrefix = (guild) => guild ? guild._commandPrefix ? guild._commandPrefix : options.commandPrefix : options.commandPrefix;
+        	/**
+		* To get the command usage of the command provided
+		* @type {function}
+		*/
+		this.getUsage = (guild, usage) => `${guild ? guild._commandPrefix ? guild._commandPrefix : options.commandPrefix : options.commandPrefix}${usage}`;
+        	/**
+		* To get the color of the guild provided
+		* @type {function}
+		*/
+		this.getColor = (guild) => guild ? guild.color ? guild.color : this.util.colors.default : this.util.colors.default
 		/**
 		 * The client's setting provider
 		 * @type {?SettingProvider}

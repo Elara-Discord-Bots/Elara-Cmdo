@@ -90,6 +90,12 @@ class CommandoClient extends discord.Client {
 		* @type {ElaraUtil}
 		*/
 		this.util = eutil;
+		this.inviteCache = new discord.Collection();
+        	this.invites = new discord.Collection();
+        	this.GlobalCmds = []; 
+		this.main = false; 
+		this.GlobalUsers = [];
+        	this.afkUsers = new discord.Collection();
 		/**
 		* To get the prefix of the guild/client provided
 		* @type {function}

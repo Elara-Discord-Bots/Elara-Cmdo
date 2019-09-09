@@ -1,6 +1,6 @@
 const MessageBuilder = require("./builder");
 
-const snekfetch = require("snekfetch");
+const snekfetch = require("superagent");
 const util = require("util");
 
 const ENDPOINT = "https://discordapp.com/api/v6/webhooks";

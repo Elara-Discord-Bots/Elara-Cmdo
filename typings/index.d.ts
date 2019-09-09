@@ -242,6 +242,7 @@ declare module 'elaracmdo' {
 		public handleEvent: object;
 		public registry: CommandoRegistry;
 		public settings: GuildSettingsHelper;
+		public util: ElaraUtil;
 
 		public isOwner(user: UserResolvable): boolean;
 		public setProvider(provider: SettingProvider | Promise<SettingProvider>): Promise<void>;
@@ -326,7 +327,41 @@ declare module 'elaracmdo' {
 		public setCommandEnabled(command: CommandResolvable, enabled: boolean): void;
 		public setGroupEnabled(group: CommandGroupResolvable, enabled: boolean): void;
 	}
-
+	export class ElaraColors {
+		public red: string;
+		public green: string;
+		public cyan: string;
+		public default: string;
+		public orange: string;
+		public yellow: string;
+	}
+	export class ElaraEmojis {
+		public sreact: string;
+		public nreact: string;
+		public rload: string;
+		public rplan: string;
+		public semoji: string;
+		public eplan: string;
+		public nemoji: string;
+		public eload: string;
+		public robot: string;
+		public eminus: string;
+		public rminus: string;
+		public eplus: string;
+		public rplus: string;
+	}
+	export class ElaraUtil {
+		public colors: ElaraColors;
+		public emojis: ElaraEmojis;
+		public fortunes: string[];
+		public jobs: string[];
+		public throws: string[];
+		public status: object;
+		public perms: object;
+		public permbits: object;
+		public dcolors: object;
+		public verifLevels: string[];
+	}
 	export class CommandoRegistry {
 		public constructor(client?: CommandoClient);
 

@@ -14,6 +14,7 @@ module.exports = {
 	RichDisplay: require('./commands/React/RichDisplay'),
 	RichMenu: require('./commands/React/RichMenu'),
 	ReactionHandler: require('./commands/React/ReactionHandler'),
+	Weather: require('./extensions/packages/weather-js/index'),
 	Fortnite: require('./extensions/packages/fortnite/index'),
 	Translate: require("./extensions/packages/translate/index"),
 	Docs: require("./extensions/packages/discordjs-docs/index"),

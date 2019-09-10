@@ -1,7 +1,4 @@
-const Command = require('../base');
-const Discord = require('discord.js');
-const moment = require('moment')
-require('moment-duration-format')
+const Command = require('../base'), Discord = require('discord.js');
 module.exports = class BotinfoCommand extends Command {
     constructor(client) {
         super(client, {
@@ -19,34 +16,31 @@ module.exports = class BotinfoCommand extends Command {
 
     }
     async run(message) {
-        try{
-        let prefix = message.guild ? message.guild._commandPrefix : this.client.commandPrefix;
-        let bot = this.client.user;
-        let botembed = new Discord.MessageEmbed()
-            .setTitle(`Bot Information`)
-            .setAuthor(bot.tag, bot.displayAvatarURL())
-            .setColor(message.guild ? message.guild.color : this.client.util.colors.default)
-            .setThumbnail(this.client.user.displayAvatarURL())
-            .addField(`User Info`, `
-            **User: ** ${bot} \`@${bot.tag}\` (${bot.id})
-            **Avatar: **[Click Here](${bot.displayAvatarURL()})
-            **Created At: **${moment(this.client.user.createdAt).format('MMMM Do YYYY, h:mm:ssa')}`, false)
-            .addField(`Info`, `
-            **Prefixes:** ${prefix}, ${this.client.user}
-            **Mutual Servers: **${this.client.guilds.filter(g => g.members.get(message.author.id)).size}
-            **Stats: ** Do \`${prefix}stats\`
-            **Bot Owners: **${this.client.owners.map(c => c.tag).join(' | ')}`, true)
-            .addField(`Links`, `
-            [Invite](${this.client.config.links.invite})
-            [Support Server](${this.client.options.invite})
-            [Github](${this.client.config.links.github})
-            [DBL](${this.client.config.links.dblpro})
-            `, true)
-            .setFooter(`Requested By ${message.author.tag}`, message.author.displayAvatarURL())
-        message.say(botembed)
-        } catch (e) {
-            this.client.error(this.client, message, e);
-            this.client.f.logger(this.client, message, e.stack)
-        }
+        let embed = new Discord.MessageEmbed()
+        .setAuthor(`Information about myself`, this.client.user.displayAvatarURL())
+        .setColor(this.client.util.colors.cyan)
+        .setThumbnail(this.client.user.displayAvatarURL())
+        .setDescription(`
+        **__User__**
+        - Name: ${this.client.user.username}
+        - ID: ${this.client.user.id}
+        - Avatar: [Link](${this.client.user.displayAvatarURL()})
+        - Created: ${require('moment')(this.client.user.createdAt).format('dddd, MMMM Do YYYY, h:mm:ssa')}
+
+        **__Misc__**
+        - Status: ${this.client.util.status[this.client.user.presence.status]} ${this.client.user.presence.status.replace("online", "Online").replace("dnd", "DND").replace("idle", "Idle").replace("offline", "Offline").replace("invisible", "Offline")}
+        - Prefixes: \`${await this.client.getPrefix(message.guild)}\`, \`@${this.client.user.tag}\`
+        - Owner${this.client.owners.length === 1 ? "" : "s"}: ${await this.client.owners.map(c => `\`${c.tag}\``).join(', ')}
+        - Mutual Server${this.client.guilds.filter(g => g.members.get(message.author.id)).size === 1 ? "" : "s"}: ${this.client.guilds.filter(g => g.members.get(message.author.id)).size}
+        - Shards: ${this.client.ws.shards.map(c => c).length}
+
+        **__Links__**
+        - Support: [Link](${this.client.options.invite})
+        - Invite: [Link](${this.client.config.links.invite})
+        - Github: [Link](${this.client.config.links.github})
+        - DBL: [Link](${this.client.config.links.dblpro})
+        - Vote: [Link](${this.client.config.links.dblpro}/vote)
+        `)
+        return message.channel.send(embed)
     }
 }

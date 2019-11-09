@@ -120,6 +120,7 @@ class ReactionHandler extends ReactionCollector {
 			})
 			this[this.methodMap.get(reaction.emoji.name)](user);
 		});
+		setTimeout(() => {this.emit("end")}, this.time || 120000)
 		this.on('end', () => {
 			if (this.reactionsDone && !this.message.deleted) this.message.reactions.removeAll();
 				let e = new MessageEmbed()
@@ -138,23 +139,6 @@ class ReactionHandler extends ReactionCollector {
 				})
 			}, 5000)
 			})
-		setTimeout(() => {
-		 if (this.reactionsDone && !this.message.deleted) this.message.reactions.removeAll();
-		 let e = new MessageEmbed()
-				.setAuthor(' ', " ", " ")
-				.setTitle(`Menu Closed`)
-				.setDescription(' ')
-				.setColor(`#FF0000`)
-				.setFooter('This message will be deleted in 20 seconds', " ")
-				.setThumbnail(' ')
-				.setImage(' ')
-				.setURL(' ')
-				e.fields.forEach(c => c.pop())
-				
-				setTimeout(async () => {this.message.edit(e).then(async () => {
-				await this.message.delete({ timeout: 20000, reason: "Auto" });
-				})
-		}, this.time)
 }
 
 	/**

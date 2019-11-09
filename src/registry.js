@@ -318,7 +318,6 @@ class CommandoRegistry {
 		if(commands.extra){
 		this.registerCommands([
 		require("./commands/util/support"),
-		require("./commands/util/uptime"),
 		require("./commands/util/invite"),
 		require("./commands/util/info")
 		])

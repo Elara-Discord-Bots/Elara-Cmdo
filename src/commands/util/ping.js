@@ -10,7 +10,7 @@ module.exports = class PingCommand extends Command {
             memberName: 'ping',
             description: 'Shows the ping for the bot',
             examples: ['ping'],
-            aliases: ["pong", "pung"],
+            aliases: ["pong", "pung", `uptime`],
             guildOnly: false,
             throttling: {
                 usages: Globalcooldown.usage,

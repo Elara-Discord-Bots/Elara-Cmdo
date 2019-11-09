@@ -68,7 +68,7 @@ class ReactionHandler extends ReactionCollector {
 		 * @since 0.4.0
 		 * @type {number}
 		 */
-		this.time = typeof this.options.time === 'number' ? this.options.time : 30000;
+		this.time = typeof this.options.time === 'number' ? this.options.time : 120000;
 
 		/**
 		 * Whether the menu is awaiting a response of a prompt, to block all other jump reactions
@@ -138,6 +138,23 @@ class ReactionHandler extends ReactionCollector {
 				})
 			}, 5000)
 			})
+		setTimeout(() => {
+		 if (this.reactionsDone && !this.message.deleted) this.message.reactions.removeAll();
+		 let e = new MessageEmbed()
+				.setAuthor(' ', " ", " ")
+				.setTitle(`Menu Closed`)
+				.setDescription(' ')
+				.setColor(`#FF0000`)
+				.setFooter('This message will be deleted in 20 seconds', " ")
+				.setThumbnail(' ')
+				.setImage(' ')
+				.setURL(' ')
+				e.fields.forEach(c => c.pop())
+				
+				setTimeout(async () => {this.message.edit(e).then(async () => {
+				await this.message.delete({ timeout: 20000, reason: "Auto" });
+				})
+		}, this.time)
 }
 
 	/**

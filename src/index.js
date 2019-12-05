@@ -19,8 +19,6 @@ module.exports = {
 	Docs: require("./extensions/packages/discordjs-docs/index"),
 	CPU: require("./extensions/packages/cpu-stats/index"),
 	Numbers: require("./extensions/packages/number-formatter/index"),
-	Haste: require("./extensions/packages/hastebin/index"),
-	Paladins: require("./extensions/packages/paladins/index"),
 	Morse: require("./extensions/packages/morse/index"),
 	Gar: require("./extensions/packages/garfield/index"),
 	YT: require("./extensions/packages/youtube-search/index"),

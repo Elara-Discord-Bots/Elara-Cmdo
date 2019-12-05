@@ -17,7 +17,10 @@
 		"common-tags": "^1.8.0",
 		"moment": "^2.24.0",
 		"moment-duration-format": "^2.2.2",
-		"require-all": "^3.0.0"
+		"require-all": "^3.0.0",
+		"request": "^2.88.0",
+		"querystring": "^0.2.0",
+		"xml2js": "^0.4.22"
 	},
 	"devDependencies": {
 		"@types/node": "^12.0.7",

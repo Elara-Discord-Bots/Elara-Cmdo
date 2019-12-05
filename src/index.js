@@ -16,7 +16,6 @@ module.exports = {
 	ReactionHandler: require('./commands/React/ReactionHandler'),
 	Weather: require('./extensions/packages/weather-js/index'),
 	Fortnite: require('./extensions/packages/fortnite/index'),
-	Translate: require("./extensions/packages/translate/index"),
 	Docs: require("./extensions/packages/discordjs-docs/index"),
 	CPU: require("./extensions/packages/cpu-stats/index"),
 	Numbers: require("./extensions/packages/number-formatter/index"),

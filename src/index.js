@@ -21,7 +21,6 @@ module.exports = {
 	Numbers: require("./extensions/packages/number-formatter/index"),
 	Morse: require("./extensions/packages/morse/index"),
 	Gar: require("./extensions/packages/garfield/index"),
-	YT: require("./extensions/packages/youtube-search/index"),
 	util: require('./util'),
 	eutil: require("./eutil"),
 	version: require('../package').version,

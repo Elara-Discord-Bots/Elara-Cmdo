@@ -15,7 +15,6 @@ module.exports = {
 	RichMenu: require('./commands/React/RichMenu'),
 	ReactionHandler: require('./commands/React/ReactionHandler'),
 	Weather: require('./extensions/packages/weather-js/index'),
-	Docs: require("./extensions/packages/discordjs-docs/index"),
 	CPU: require("./extensions/packages/cpu-stats/index"),
 	Numbers: require("./extensions/packages/number-formatter/index"),
 	Morse: require("./extensions/packages/morse/index"),

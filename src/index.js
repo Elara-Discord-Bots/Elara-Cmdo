@@ -24,7 +24,6 @@ module.exports = {
 	Paladins: require("./extensions/packages/paladins/index"),
 	Morse: require("./extensions/packages/morse/index"),
 	Gar: require("./extensions/packages/garfield/index"),
-	randomPuppy: require("./extensions/packages/random-puppy/index"),
 	YT: require("./extensions/packages/youtube-search/index"),
 	util: require('./util'),
 	eutil: require("./eutil"),

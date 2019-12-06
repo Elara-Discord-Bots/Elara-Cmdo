@@ -65,7 +65,7 @@ module.exports = class NCommand extends Command {
 
           } catch (e) {
             this.client.error(this.client, message, e);
-            this.client.f.logger(this.client, message, e.stack)
+            this.client.logger(this.client, message, e.stack)
           }
 }
 }

@@ -17,6 +17,7 @@ module.exports = {
 	Weather: require('./extensions/packages/weather-js/index'),
 	CPU: require("./extensions/packages/cpu-stats/index"),
 	Numbers: require("./extensions/packages/number-formatter/index"),
+	Convert: require("./extensions/packages/ordinal/index"),
 	Morse: require("./extensions/packages/morse/index"),
 	Gar: require("./extensions/packages/garfield/index"),
 	util: require('./util'),

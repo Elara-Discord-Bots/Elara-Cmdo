@@ -30,7 +30,7 @@ module.exports = class NCommand extends Command {
         let e = new MessageEmbed().setColor(this.client.util.colors.default)
         if(message.guild){
            e.setColor(message.guild.color);
-          this.client.db.findOne({guildID: message.guild.id}, async (err, db) => {
+          this.client.dbs.settings.findOne({guildID: message.guild.id}, async (err, db) => {
             if(db){
               if(prefix !== ""){
               if(!message.member.hasPermission("MANAGE_GUILD")) return this.client.error(this.client, message, `You need the \`Manage Server\` permission to change the prefix!`);

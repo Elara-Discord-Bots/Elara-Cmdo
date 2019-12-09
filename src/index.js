@@ -19,7 +19,6 @@ module.exports = {
 	Numbers: require("./extensions/packages/number-formatter/index"),
 	Convert: require("./extensions/packages/ordinal/index"),
 	Morse: require("./extensions/packages/morse/index"),
-	Gar: require("./extensions/packages/garfield/index"),
 	util: require('./util'),
 	eutil: require("./eutil"),
 	version: require('../package').version,

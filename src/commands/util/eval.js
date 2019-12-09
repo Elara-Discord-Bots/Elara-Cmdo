@@ -1,24 +1,45 @@
 const {MessageEmbed} = require('discord.js'),
 	  {Command, util: {escapeRegex}, eutil} = require('elaracmdo'),
-	  {exec} = require('child_process'),
 	  config = require('../../../../../src/util/config'),
 	  util = require('util'),
-      	  moment = require("moment"),
-          ms = require("ms"),
-	  time = [];
+      moment = require("moment"),
+      ms = require("ms"),
+      time = [],
+      filterArgs = (args) => {
+      return args
+      .replace(new RegExp(config.token, "g"), "")
+      .replace(new RegExp(config.apis.dbl, "g"), "")
+	  .replace(config.mongo, "")
+	  .replace(new RegExp(config.webhooks.audit, "g"), "")
+	  .replace(new RegExp(config.webhooks.feedback, "g"), "")
+	  .replace(new RegExp(config.misc.website.admin, "g"), "")
+      .replace(new RegExp(config.webhooks.mentions, "g"), "")
+      .replace(new RegExp(config.webhooks.log, "g"), "")
+      .replace(new RegExp(config.webhooks.error, "g"), "")
+      .replace(new RegExp(config.webhooks.servers, "g"), "")
+      .replace(new RegExp(config.webhooks.action, "g"), "")
+      .replace(new RegExp(config.apis.paladins.devID, "g"), "")
+      .replace(new RegExp(config.apis.paladins.key, "g"), "")
+      .replace(new RegExp(config.apis.IMDB, "g"), "")
+      .replace(new RegExp(config.apis.api, "g"), "")
+      .replace(new RegExp(config.apis.fortnite, "g"), "")
+      .replace(new RegExp(config.apis.giphy, "g"), "")
+      .replace(new RegExp(config.apis.twitch, "g"), "")
+      .replace(new RegExp(config.apis.youtube, "g"), "")
+      };
 require("moment-duration-format")
 module.exports = class EvalCommand extends Command {
 	constructor(client) {
 		super(client, {
-            		name: 'eval',
-            		aliases: [`e`, `ev`, `eva`, `code`],
+            name: 'eval',
+            aliases: [`e`, `ev`, `eva`, `code`],
 			group: 'owner',
 			memberName: 'eval',
 			description: 'Executes JavaScript code.',
 			details: 'Only the bot owner(s) may use this command.',
 			ownerOnly: true,
 			guarded: true,
-            		hidden: true,
+            hidden: true,
 			args: [
 				{
 					key: 'script',
@@ -119,12 +140,12 @@ async run(message, args) {
 					}
 			}
 			},
-			doReply = val => {
+			doReply = async (val) => {
 			if(val instanceof Error) {
 				evalembed.setTitle(`Callback Error`).setDescription(`\`${val}\``)
 				return message.say(evalembed);
 			} else {
-				const result = this.makeResultMessages(val, process.hrtime(this.hrStart));
+				const result = await this.makeResultMessages(val, process.hrtime(this.hrStart));
 				if(Array.isArray(result)) {
 					for(const item of result){
 						evalembed.setTitle(`Result`).setDescription(item)
@@ -148,31 +169,13 @@ async run(message, args) {
 			async function then(args, depth = 0){
 				let hm = await args;
 				let res = await util.inspect(hm, {depth: depth});
-				let eh = await res
-				.replace(new RegExp(config.token, "g"), "")
-				.replace(new RegExp(config.apis.dbl, "g"), "")
-				.replace(new RegExp(config.mongo, "gi"), "")
-				.replace(new RegExp(config.mongo, "g"), "")
-				.replace(new RegExp(config.webhooks.mentions, "g"), "")
-				.replace(new RegExp(config.webhooks.log, "g"), "")
-				.replace(new RegExp(config.webhooks.error, "g"), "")
-				.replace(new RegExp(config.webhooks.servers, "g"), "")
-				.replace(new RegExp(config.webhooks.action, "g"), "")
-				.replace(new RegExp(config.apis.paladins.devID, "g"), "")
-				.replace(new RegExp(config.apis.paladins.key, "g"), "")
-				.replace(new RegExp(config.apis.IMDB, "g"), "")
-				.replace(new RegExp(config.apis.api, "g"), "")
-				.replace(new RegExp(config.apis.fortnite, "g"), "")
-				.replace(new RegExp(config.apis.giphy, "g"), "")
-				.replace(new RegExp(config.apis.twitch, "g"), "")
-				.replace(new RegExp(config.apis.youtube, "g"), "")
-				
+				let eh = await filterArgs(res);
 				let emg = new MessageEmbed()
 				.setTitle(`Response`)
 				if(res.length >= 2040){
 				emg.setDescription(await f.misc.bin("Output", eh))
 				}else{
-				emg.setDescription(`${eh.includes("https://hasteb.in/") ? `${eh.replace(/'|'/gi, "")}` : `\`\`\`js\n${eh}\`\`\``}`)
+				emg.setDescription(`${eh.includes("https://") ? `${eh.replace(/'|'/gi, "")}` : `\`\`\`js\n${eh}\`\`\``}`)
 				}
 				emg.setColor(eutil.colors.default)
 				.setTimestamp()
@@ -180,11 +183,11 @@ async run(message, args) {
 				
 			}
 			async function dm(id, msgs){
-				if(!id || !msgs) return message.channel.send(`Well provide an id and message..`);
+				if(!id || !msgs) return bot.error(message, `Well provide an id and message..`);
 				let us = await bot.users.get(id)
-				if(!us) return message.channel.send(`User not found.. ***Sad ${bot.user.username} noise***`);
-				us.send(msgs).then(() => {return message.channel.send(`Message sent`).then(m => m.delete({timeout: 10000}).catch(() => {}))}).catch(err => {
-				return message.channel.send(`I couldn't dm the user.. ***Sad ${bot.user.username} noise***`)
+				if(!us) return bot.error(msg, `User not found.. ***Sad ${bot.user.username} noise***`);
+				us.send(msgs).then(() => {return bot.error(message, `Message sent`).then(m => m.delete({timeout: 10000}).catch(() => {}))}).catch(err => {
+				return bot.error(message, `I couldn't dm the user.. ***Sad ${bot.user.username} noise***`)
 				});
 			}
 			const hrStart = process.hrtime();
@@ -195,7 +198,7 @@ async run(message, args) {
 			return message.say(evalembed);
 		}
 		this.hrStart = process.hrtime();
-		const response = this.makeResultMessages(this.lastResult, hrDiff, args.script, message.editable);
+		const response = await this.makeResultMessages(this.lastResult, hrDiff, args.script, message.editable);
 		if (msg.editable) {
             if (response instanceof Array) {
                 if (response.length > 0) response = response.slice(1, response.length - 1);
@@ -231,34 +234,36 @@ async run(message, args) {
         }
 	}
 
-	makeResultMessages(result, hrDiff, input = null, editable = false) {
-		const inspected = util.inspect(result, { depth: 0 }).replace(new RegExp('!!NL!!', 'g'), '\n').replace(this.sensitivePattern, 'no u');
+	async makeResultMessages(result, hrDiff, input = null, editable = false) {
+		const inspected = util.inspect(result, { depth: 0 }).replace(new RegExp('!!NL!!', 'g'), '\n').replace(this.sensitivePattern, '');
+		let i = await filterArgs(inspected);
 		if(input) {
 			if(hrDiff){
 			time.push(`${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.`)
 			}
 			return `${editable ? `\`\`\`js\n${input}\`\`\`` : ''}
-			\`\`\`js\n${inspected}\`\`\``;
+			\`\`\`js\n${i}\`\`\``;
 		} else {
 			if(hrDiff){
 			time.push(`${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.`)
 			}
-			return `\`\`\`js\n${inspected}\`\`\``;
+			return `\`\`\`js\n${i}\`\`\``;
 		}
 	}
-	pastebinresponse(result, hrDiff, input = null, editable = false) {
-		const inspected = util.inspect(result, { depth: 0 }).replace(new RegExp('!!NL!!', 'g'), '\n').replace(this.sensitivePattern, 'no u');
+	async pastebinresponse(result, hrDiff, input = null, editable = false) {
+        const inspected = util.inspect(result, { depth: 0 }).replace(new RegExp('!!NL!!', 'g'), '\n').replace(this.sensitivePattern, 'no u')
+        let i = await filterArgs(inspected);
 		if(input) {
 			if(hrDiff){
 			time.push(`${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.`)
 			}
 			return `${editable ? `${input}` : ''}
-			${inspected}`;
+			${i}`;
 		} else {
 			if(hrDiff){
 			time.push(`${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.`)
 			}
-			return inspected;
+			return i;
 		}
 	}
 

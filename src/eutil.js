@@ -1,5 +1,4 @@
-const Discord = require('discord.js');
-//Discord Colors...
+
 const emojis = {
     "sreact": "476629550797684736",
     "nreact": "482868924573155349",

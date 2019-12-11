@@ -140,5 +140,5 @@ const emojis = {
     };
 //End of Random Utility stuff
 module.exports = {
-    colors,emojis,status,dcolors,verifLevels, jobs,throws, perms, permbits
+    colors,emojis,status,verifLevels, jobs,throws, perms, permbits
 }

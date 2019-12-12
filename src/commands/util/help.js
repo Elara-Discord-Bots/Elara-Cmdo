@@ -14,6 +14,7 @@ module.exports = class HelpCommand extends Command {
             examples: [`${client.commandPrefix}help`, `${client.commandPrefix}help prefix`],
             guarded: true,
             guildOnly: true,
+	    clientPermissions: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES", "SEND_MESSAGES"],
             throttling: {
                 usages: Globalcooldown.usage,
                 duration: Globalcooldown.duration

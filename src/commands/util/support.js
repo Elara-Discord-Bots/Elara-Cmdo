@@ -9,6 +9,7 @@ module.exports = class SCommand extends Command {
             examples: [`${client.commandPrefix}support`],
             description: "Gives you the invite to the support server",
             group: "bot",
+            clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"],
             throttling: {
                 usages: Globalcooldown.usage,
                 duration: Globalcooldown.duration

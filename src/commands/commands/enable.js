@@ -14,6 +14,7 @@ module.exports = class EnableCommandCommand extends Command {
 				Only administrators may use this command.
 			`,
 			examples: ['enable util', 'enable Utility', 'enable prefix'],
+			clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"],
 			guarded: true,
 			throttling: {
                 usages: 2,

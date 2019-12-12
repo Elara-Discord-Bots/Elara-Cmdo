@@ -346,8 +346,8 @@ class Command {
 				embed.setDescription(`${this.name}, can only be used in a server.`)
 				return message.channel.send(embed);
 			case 'nsfw':
-					embed.setDescription(`${this.name}, can't be used in this channel.`)
-					return message.channel.send(embed);
+			    embed.setDescription(`${this.name}, can't be used in this channel.`)
+			    return message.channel.send(embed);
 			case 'permission': {
 				if(data.response){
 					embed.setDescription(data.response);
@@ -359,10 +359,18 @@ class Command {
 			case 'clientPermissions': {
 				if(data.missing.length === 1) {
 					embed.setDescription(`I need the "${permissions[data.missing[0]]}" permission for the \`${this.name}\` command to work.`)
+					if(message.channel.permissionsFor(message.client.user).has("EMBED_LINKS")){
 					return message.channel.send(embed);
+					}else{
+					return message.channel.send(embed.description);
+					}
 				}
 				embed.setDescription(`I need the following permissions for the \`${this.name}\` command to work:\n${data.missing.map(perm => permissions[perm]).join(', ')}`)
-				return message.channel.send(embed);
+				if(message.channel.permissionsFor(message.client.user).has("EMBED_LINKS")){
+				   return message.channel.send(embed);
+				}else{
+				   return message.channel.send(embed.description);
+				}
 			}
 			case 'throttling': {
 			embed.setTitle(`HOLD UP!`)

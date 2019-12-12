@@ -7,6 +7,7 @@ module.exports = class NCommand extends Command {
             aliases: ["botinvite", `inv`],
             examples: [`${client.commandPrefix}invite`],
             description: "Gives you a invite for the bot.",
+            clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"],
             throttling: {
                 usages: Globalcooldown.usage,
                 duration: Globalcooldown.duration

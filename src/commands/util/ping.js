@@ -12,6 +12,7 @@ module.exports = class PingCommand extends Command {
             examples: ['ping'],
             aliases: ["pong", "pung", `uptime`],
             guildOnly: false,
+	    clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"],
             throttling: {
                 usages: Globalcooldown.usage,
                 duration: Globalcooldown.duration

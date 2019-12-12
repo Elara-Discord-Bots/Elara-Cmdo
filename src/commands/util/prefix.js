@@ -9,6 +9,7 @@ module.exports = class NCommand extends Command {
              description: 'Checks the prefix',
              group: 'bot',
              guarded: true,
+             clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"],
              throttling: {
                 usages: Globalcooldown.special.usage,
                 duration: Globalcooldown.special.duration

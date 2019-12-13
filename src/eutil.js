@@ -23,12 +23,12 @@ const emojis = {
     "invisible": "<a:offline:506431026604539904>"
 },
       colors = {
-    "red": "#FF0000",
-    "green": "#FF000",
-    "yellow": "#FAFF00",
-    "orange": "#FF8300",
-    "cyan": "#00ffe9",
-    "default": "#36393E"
+    "red": 0xFF0000,
+    "green": 0xFF000,
+    "yellow": 0xFAFF00,
+    "orange": 0xFF8300,
+    "cyan": 0x00ffe9,
+    "default": 0x36393E
 },
       verifLevels = [
     "None",

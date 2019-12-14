@@ -308,6 +308,7 @@ declare module 'elaracmdo' {
 		private _settings: GuildSettingsHelper;
 
 		public commandPrefix: string;
+		public color: string;
 		public readonly settings: GuildSettingsHelper;
 
 		public commandUsage(command?: string, user?: User): string;
@@ -338,6 +339,10 @@ declare module 'elaracmdo' {
 		public rminus: string;
 		public eplus: string;
 		public rplus: string;
+		public rn: string;
+		public en: string;
+		public rd: string;
+		public ed: string;
 	}
 	export class ElaraUtil {
 		public colors: ElaraColors;

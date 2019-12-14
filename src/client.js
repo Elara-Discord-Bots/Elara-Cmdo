@@ -35,6 +35,10 @@ const eutil = require("./eutil");
  * @property {string} [rminus] - The minus emoji id
  * @property {string} [eplus] - The plus emoji
  * @property {string} [rplus] - The plus emoji id
+ * @property {string} [en] - The enabled emoji
+ * @property {string} [rn] - The enabled emoji id
+ * @property {string} [ed] - The disabled emoji
+ * @property {string} [rd] - The disabled emoji id
  */
 /**
  * @typedef {ElaraUtil} ElaraUtil

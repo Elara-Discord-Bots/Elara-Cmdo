@@ -183,11 +183,13 @@ async run(message, args) {
 				
 			}
 			async function dm(id, msgs){
-				if(!id || !msgs) return bot.error(message, `Well provide an id and message..`);
+				let loading = await message.channel.send({embed: {title: `${message.client.util.emojis.eload} Loading...`, color: message.client.util.colors.default}});
+				if(!id || !msgs) return loading.edit({embed: {title: `Well provide an id and message..`, color: message.client.util.colors.red}});
 				let us = await bot.users.get(id)
-				if(!us) return bot.error(msg, `User not found.. ***Sad ${bot.user.username} noise***`);
-				us.send(msgs).then(() => {return bot.error(message, `Message sent`).then(m => m.delete({timeout: 10000}).catch(() => {}))}).catch(err => {
-				return bot.error(message, `I couldn't dm the user.. ***Sad ${bot.user.username} noise***`)
+				if(!us) return loading.edit({embed: {title: `User not found.. ***Sad ${bot.user.username} noise***`, color: message.client.util.colors.red}})
+				us.send(msgs)
+				.then(() => loading.edit({embed: {title: `Message sent to ${us.tag} (${us.id})`, color: message.client.util.colors.green}})).catch(err => {
+					loading.edit({embed: {title: `I was unable to message: ${us.tag} (${us.id}) ***Sad ${bot.user.username} noise***`, color: message.client.util.colors.red}})
 				});
 			}
 			const hrStart = process.hrtime();

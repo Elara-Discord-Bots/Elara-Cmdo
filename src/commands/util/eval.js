@@ -184,13 +184,15 @@ async run(message, args) {
 			}
 			async function dm(id, msgs){
 				let loading = await message.channel.send({embed: {title: `${message.client.util.emojis.eload} Loading...`, color: message.client.util.colors.default}});
-				if(!id || !msgs) return loading.edit({embed: {title: `Well provide an id and message..`, color: message.client.util.colors.red}});
+				setTimeout(async () => {
+				if(!id || !msgs) return loading.edit({embed: {title: `${message.client.util.emojis.nemoji} Well provide an id and message..`, color: message.client.util.colors.red}});
 				let us = await bot.users.get(id)
-				if(!us) return loading.edit({embed: {title: `User not found.. ***Sad ${bot.user.username} noise***`, color: message.client.util.colors.red}})
+				if(!us) return loading.edit({embed: {title: `${message.client.util.emojis.nemoji} User not found.. ***Sad ${bot.user.username} noise***`, color: message.client.util.colors.red}})
 				us.send(msgs)
-				.then(() => loading.edit({embed: {title: `Message sent to ${us.tag} (${us.id})`, color: message.client.util.colors.green}})).catch(err => {
-					loading.edit({embed: {title: `I was unable to message: ${us.tag} (${us.id}) ***Sad ${bot.user.username} noise***`, color: message.client.util.colors.red}})
+				.then(() => loading.edit({embed: {title: `${message.client.util.emojis.semoji} Message sent to ${us.tag} (${us.id})`, color: message.client.util.colors.green}})).catch(err => {
+					loading.edit({embed: {title: `${message.client.util.emojis.nemoji} I was unable to message: ${us.tag} (${us.id}) ***Sad ${bot.user.username} noise***`, color: message.client.util.colors.red}})
 				});
+			}, 5000)
 			}
 			const hrStart = process.hrtime();
 			this.lastResult = eval(args.script);

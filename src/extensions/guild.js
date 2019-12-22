@@ -1,4 +1,4 @@
-const { Structures, Collection} = require('discord.js');
+const { Structures} = require('discord.js');
 const Command = require('../commands/base');
 const GuildSettingsHelper = require('../providers/helper');
 
@@ -40,7 +40,7 @@ module.exports = Structures.extend('Guild', Guild => {
 			* @name CommandGuild#invites
 			* @type {Map}
 			*/
-			this.invites = new Collection()
+			this.invites = [];
 		}
 		/**
 		 * Command prefix in the guild. An empty string indicates that there is no prefix, and only mentions will be used.

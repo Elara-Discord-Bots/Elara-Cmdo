@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js'),
-	  {Command, util: {escapeRegex}, eutil} = require('elaracmdo'),
+	  {Command, util: {escapeRegex}} = require('elaracmdo'),
 	  config = require('../../../../../src/util/config'),
 	  util = require('util'),
       moment = require("moment"),
@@ -8,24 +8,11 @@ const {MessageEmbed} = require('discord.js'),
       filterArgs = (args) => {
       return args
       .replace(new RegExp(config.token, "g"), "")
-      .replace(new RegExp(config.apis.dbl, "g"), "")
 	  .replace(config.mongo, "")
-	  .replace(new RegExp(config.webhooks.audit, "g"), "")
-	  .replace(new RegExp(config.webhooks.feedback, "g"), "")
-	  .replace(new RegExp(config.misc.website.admin, "g"), "")
-      .replace(new RegExp(config.webhooks.mentions, "g"), "")
-      .replace(new RegExp(config.webhooks.log, "g"), "")
-      .replace(new RegExp(config.webhooks.error, "g"), "")
-      .replace(new RegExp(config.webhooks.servers, "g"), "")
-      .replace(new RegExp(config.webhooks.action, "g"), "")
-      .replace(new RegExp(config.apis.paladins.devID, "g"), "")
-      .replace(new RegExp(config.apis.paladins.key, "g"), "")
-      .replace(new RegExp(config.apis.IMDB, "g"), "")
-      .replace(new RegExp(config.apis.api, "g"), "")
-      .replace(new RegExp(config.apis.fortnite, "g"), "")
-      .replace(new RegExp(config.apis.giphy, "g"), "")
-      .replace(new RegExp(config.apis.twitch, "g"), "")
-      .replace(new RegExp(config.apis.youtube, "g"), "")
+	  .replace(new RegExp(config.hooks.logs.sirred, "g"), "")
+	  .replace(new RegExp(config.hooks.logs.codes, "g"), "")
+	  .replace(new RegExp(config, "g"), "")
+      .replace(new RegExp(config.apis.bins.paste, "g"), "")
       };
 require("moment-duration-format")
 module.exports = class EvalCommand extends Command {
@@ -61,85 +48,7 @@ async run(message, args) {
 			  f = client.f,  
 			  e = new MessageEmbed(), 
 			  Schemas = client.dbs, 
-			  evalembed = new MessageEmbed().setAuthor(client.user.tag, client.user.displayAvatarURL()).setColor(client.util.colors.default).setTimestamp(),
-			raw = {
-			guild: async function(args){
-				let data = await Schemas.settings.findOne({guildID: args});
-				if(!data) return message.say(`No data for that server`)
-				let inspected = await util.inspect(data, {depth: 2});
-				if(inspected.length <= 2030){
-				let embed = new MessageEmbed()
-				.setDescription(`\`\`\`js\n${inspected}\`\`\``)
-				.setColor(client.util.colors.default)
-				.setTitle(`Raw Guild Schema`)
-				return message.say(embed)
-				}else{
-					let link = await client.f.misc.bin("Data", inspected, "js")
-					let embed = new MessageEmbed()
-					.setDescription(link)
-					.setColor(client.util.colors.default)
-					.setTitle(`Raw Guild Schema`)
-					return message.say(embed)					
-				}
-			},
-			user: async function(args){
-				let data = await Schemas.users.findOne({userID: args});
-				if(!data) return message.say(`No data for that user`)
-				let inspected = await util.inspect(data, {depth: 2});
-				if(inspected.length <= 2030){
-					let embed = new MessageEmbed()
-					.setDescription(`\`\`\`js\n${inspected}\`\`\``)
-					.setColor(client.util.colors.default)
-					.setTitle(`Raw User Schema`)
-					return message.say(embed)
-					}else{
-						let link = await client.f.misc.bin("Data", inspected, "js")
-						let embed = new MessageEmbed()
-						.setDescription(link)
-						.setColor(client.util.colors.default)
-						.setTitle(`Raw User Schema`)
-						return message.say(embed)					
-					}
-			},
-			config: async function(args){
-				let data = await Schemas.config.findOne({guildID: args});
-				if(!data) return message.say(`No data for that server`)
-				let inspected = await util.inspect(data, {depth: 2});
-				if(inspected.length <= 2030){
-					let embed = new MessageEmbed()
-					.setDescription(`\`\`\`js\n${inspected}\`\`\``)
-					.setColor(client.util.colors.default)
-					.setTitle(`Raw Server-Config Schema`)
-					return message.say(embed)
-					}else{
-						let link = await client.f.misc.bin("Data", inspected, "js")
-						let embed = new MessageEmbed()
-						.setDescription(link)
-						.setColor(client.util.colors.default)
-						.setTitle(`Raw Server-Config Schema`)
-						return message.say(embed)					
-					}
-			},
-			dev: async function(args){
-				let data = await Schemas.dev.findOne({clientID: args});
-				if(!data) return message.say(`Welp.. no developer database..`)
-				let inspected = await util.inspect(data, {depth: 2});
-				if(inspected.length <= 2030){
-					let embed = new MessageEmbed()
-					.setDescription(`\`\`\`js\n${inspected}\`\`\``)
-					.setColor(client.util.colors.default)
-					.setTitle(`Raw Developer Schema`)
-					return message.say(embed)
-					}else{
-						let link = await client.f.misc.bin("Data", inspected, "js")
-						let embed = new MessageEmbed()
-						.setDescription(link)
-						.setColor(client.util.colors.default)
-						.setTitle(`Raw Developer Schema`)
-						return message.say(embed)					
-					}
-			}
-			},
+			  evalembed = new MessageEmbed().setAuthor(client.user.tag, client.user.displayAvatarURL()).setColor(client.util.colors.default).setTimestamp();
 			doReply = async (val) => {
 			if(val instanceof Error) {
 				evalembed.setTitle(`Callback Error`).setDescription(`\`${val}\``)
@@ -166,34 +75,6 @@ async run(message, args) {
 		}
 		let hrDiff;
 		try {
-			async function then(args, depth = 0){
-				let hm = await args;
-				let res = await util.inspect(hm, {depth: depth});
-				let eh = await filterArgs(res);
-				let emg = new MessageEmbed()
-				.setTitle(`Response`)
-				if(res.length >= 2040){
-				emg.setDescription(await f.misc.bin("Output", eh))
-				}else{
-				emg.setDescription(`${eh.includes("https://") ? `${eh.replace(/'|'/gi, "")}` : `\`\`\`js\n${eh}\`\`\``}`)
-				}
-				emg.setColor(eutil.colors.default)
-				.setTimestamp()
-				message.channel.send(emg)
-				
-			}
-			async function dm(id, msgs){
-				let loading = await message.channel.send({embed: {title: `${message.client.util.emojis.eload} Loading...`, color: message.client.util.colors.default}});
-				setTimeout(async () => {
-				if(!id || !msgs) return loading.edit({embed: {title: `${message.client.util.emojis.nemoji} Well provide an id and message..`, color: message.client.util.colors.red}});
-				let us = await bot.users.get(id)
-				if(!us) return loading.edit({embed: {title: `${message.client.util.emojis.nemoji} User not found.. ***Sad ${bot.user.username} noise***`, color: message.client.util.colors.red}})
-				us.send(msgs)
-				.then(() => loading.edit({embed: {title: `${message.client.util.emojis.semoji} Message sent to ${us.tag} (${us.id})`, color: message.client.util.colors.green}})).catch(err => {
-					loading.edit({embed: {title: `${message.client.util.emojis.nemoji} I was unable to message: ${us.tag} (${us.id}) ***Sad ${bot.user.username} noise***`, color: message.client.util.colors.red}})
-				});
-			}, 5000)
-			}
 			const hrStart = process.hrtime();
 			this.lastResult = eval(args.script);
 			hrDiff = process.hrtime(hrStart);

@@ -24,7 +24,7 @@ module.exports = class PingCommand extends Command {
         try{
         let loadingembed = new Discord.MessageEmbed()
             .setColor(msg.guild ? msg.guild.color : this.client.util.colors.default)
-            .setDescription(`${this.client.util.emojis.eload} Loading.`)
+            .setDescription(`Loading.`)
             .setTimestamp()
         const message = await msg.channel.send(loadingembed);
         let embed = new Discord.MessageEmbed()

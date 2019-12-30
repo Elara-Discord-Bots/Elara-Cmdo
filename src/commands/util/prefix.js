@@ -54,6 +54,7 @@ module.exports = class NCommand extends Command {
               return message.channel.send(e)
               }
             }else{
+              await new this.client.dbs.settings({guildID: message.guild.id}).save().catch(() => {});
               e.setTitle(`Prefix`).setAuthor(message.guild.name, message.guild.iconURL()).setDescription(this.client.commandPrefix)
               if(message.member.hasPermission("MANAGE_GUILD")) e.setFooter(`Note: To change the prefix do ${this.client.commandPrefix}setprefix [newprefix]`);
               return message.channel.send(e)

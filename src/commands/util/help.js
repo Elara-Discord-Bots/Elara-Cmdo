@@ -82,6 +82,7 @@ module.exports = class HelpCommand extends Command {
             let display = new RichDisplay(e)
             groups.forEach(g => {
                 let commands = g.commands.map(c => `**${c.name}**${c.nsfw ? "(NSFW)" : ""} - ${c.description}`)
+		if(["util"].includes(g.id)) return;
                 if(g.id === "admin" && !message.member.hasPermission(`MANAGE_GUILD`)) return;
                 if(g.id === "mod" && !message.member.hasPermission("MANAGE_MESSAGES")) return;
                 if(g.id === ("owner" || "owner/misc") && !this.client.isOwner(message.author.id)) return;

@@ -35,6 +35,7 @@ async run(message, args) {
             emojis = message.client.emojis,
             channels = message.client.channels,
             guilds = message.client.guilds,
+	    Cache = client.Cache,
 			e = new MessageEmbed(),
 			evalembed = new MessageEmbed().setAuthor(client.user.tag, client.user.displayAvatarURL()).setColor(client.util.colors.default).setTimestamp();
 

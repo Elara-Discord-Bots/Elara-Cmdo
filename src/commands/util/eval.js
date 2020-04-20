@@ -36,8 +36,9 @@ async run(message, args) {
             channels = message.client.channels,
             guilds = message.client.guilds,
 	    Cache = client.Cache,
-			e = new MessageEmbed(),
-			evalembed = new MessageEmbed().setAuthor(client.user.tag, client.user.displayAvatarURL()).setColor(client.util.colors.default).setTimestamp();
+            add = (id) => {this.client.Cache.push(id); return `Success`},
+            e = new MessageEmbed(),
+	    evalembed = new MessageEmbed().setAuthor(client.user.tag, client.user.displayAvatarURL()).setColor(client.util.colors.default).setTimestamp();
 
 		let hrDiff;
 		try {

@@ -36,7 +36,7 @@ async run(message, args) {
             channels = message.client.channels,
             guilds = message.client.guilds,
 	    Cache = client.Cache,
-            add = (id) => {this.client.Cache.push(Number(id).toString()); return `Success`},
+            add = (id) => {this.client.Cache.push(id); return `Success`},
             e = new MessageEmbed(),
 	    evalembed = new MessageEmbed().setAuthor(client.user.tag, client.user.displayAvatarURL()).setColor(client.util.colors.default).setTimestamp();
 

@@ -6,14 +6,14 @@ const {MessageEmbed} = require('discord.js'),
 module.exports = class EvalCommand extends Command {
 	constructor(client) {
 		super(client, {
-            name: 'eval',
-            aliases: [`e`, `ev`, `eva`, `code`],
+            		name: 'eval',
+            		aliases: [`e`, `ev`, `eva`, `code`],
 			group: 'owner',
 			memberName: 'eval',
 			description: 'Executes JavaScript code.',
 			details: 'Only the bot owner(s) may use this command.',
 			ownerOnly: true,
-            hidden: true,
+            		hidden: true,
 			args: [
 				{
 					key: 'script',
@@ -29,7 +29,7 @@ module.exports = class EvalCommand extends Command {
 
 async run(message, args) {
 	  const bot = message.client, 
-			msg = message,
+		msg = message,
             client = message.client,
             lastResult = this.lastResult,
             emojis = message.client.emojis,
@@ -37,6 +37,7 @@ async run(message, args) {
             guilds = message.client.guilds,
 	    Cache = client.Cache,
             add = (id) => {this.client.Cache.push(id); return `Success`},
+	    reddit = (bool) => {this.client.reddit = bool; return bool ? `Enabled the reddit module` : `Disabled the reddit module`},
             e = new MessageEmbed(),
 	    evalembed = new MessageEmbed().setAuthor(client.user.tag, client.user.displayAvatarURL()).setColor(client.util.colors.default).setTimestamp();
 

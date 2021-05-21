@@ -13,6 +13,7 @@ module.exports = Structures.extend('Message', Message => {
 		constructor(client, data, channel) {
 		   super(client, data, channel);
 			this.stickers = data.stickers || [];
+			this.interaction = data.interaction || null;
 
 			/**
 			 * Whether the message contains a command (even an unknown one)
